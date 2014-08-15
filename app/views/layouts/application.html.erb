@@ -25,12 +25,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Admin Panel</a>
+      <%= link_to "FPL Assistant", root_path, "class" => "navbar-brand" %>
     </div>
 
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul id="active" class="nav navbar-nav side-nav">
-        <li class="selected"><a href="index.html"><i class="fa fa-bullseye"></i> Dashboard</a></li>
+        <li class="selected"><%= link_to raw("<i class='fa fa-bullseye'></i>Home"), root_path %></li>
         <!--
         <li><a href="bootstrap-grid.html"><i class="fa fa-table"></i> Bootstrap Grid</a></li>
         -->

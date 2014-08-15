@@ -1,6 +1,6 @@
   <div class="row">
     <div class="col-lg-12">
-      <h1>Dashboard <small>Statistics and more</small></h1>
+      <h1>Player <small>Grid</small></h1>
       <!--
       <div class="alert alert-dismissable alert-warning">
         <button data-dismiss="alert" class="close" type="button">×</button>
@@ -309,9 +309,9 @@
           url: "/players.json",
           datatype: "json",
           colNames: ["Picture", "Name", "First Name", "Last Name", "Position", "Team", "Status",
-           "News", "&pound;", "F", "TS", "PPG", "TSB", "CF", "NF","Next 3 Fixtures", "MP",
+           "News", "&pound;", "F", "TS", "PPG", "TSB", "CF", "NF", "MP",
            "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S", "B", "ESP",
-           "BPS"
+           "BPS","Next 3 Fixtures"
           ],
           colModel: [
             { name: "photo", width: 50, align: 'center', formatter: playerPicFormatter, search: false, hidden:true},
@@ -344,7 +344,6 @@
             { name: "selected_by", template: numberTemplate},
             { name: "current_fixture", hidden: true},
             { name: "next_fixture", width:50, align:'center', formatter: nextFixtureFormatter, hidden:true },
-            { name: "summary", align:'center', width:130},
             { name: "minutes", template: IntTemplate },
             { name: "goals_scored", template: IntTemplate },
             { name: "assists", template: IntTemplate },
@@ -358,7 +357,8 @@
             { name: "saves", template: IntTemplate, hidden:true },
             { name: "bonus", template: IntTemplate },
             { name: "ea_index", template: IntTemplate },
-            { name: "bps", template: IntTemplate }
+            { name: "bps", template: IntTemplate },
+            { name: "summary", align:'center', width:130}
           ],
           toppager:true,
           rownumbers: true,
@@ -451,7 +451,7 @@ jQuery("#filterGrid").jqGrid('navButtonAdd', '#filterGrid_toppager', {
     }
 
     function playerPositionFormatter(cellvalue, options, rowObject){
-      var position_short = {"Goalkeeper":"GK", "Forward":"FWD", "Midfielder":"MID", "Defender":"DEF"};
+      var position_short = {"Goalkeeper":"G", "Forward":"F", "Midfielder":"M", "Defender":"D"};
       return position_short[cellvalue];
     }
 
