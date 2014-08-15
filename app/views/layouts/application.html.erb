@@ -25,12 +25,17 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <%= link_to "FPL Assistant", root_path, "class" => "navbar-brand" %>
+      <%= link_to raw("<i class='fa fa-briefcase'></i> FPL Assistant"), root_path, "class" => "navbar-brand" %>
     </div>
 
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul id="active" class="nav navbar-nav side-nav">
-        <li class="selected"><%= link_to raw("<i class='fa fa-bullseye'></i> Home"), root_path %></li>
+        <%= nav_link raw("<i class='fa fa-home'></i> Home"), root_path %>
+        <%= nav_link raw("<i class='fa fa-question-circle'></i> Help"), "/help" %></li>
+        <%= nav_link raw("<i class='fa fa-info-circle'></i> About"), "/about" %></li>
+        <%= nav_link raw("<i class='fa fa-pencil'></i> Contact"), "/contact" %></li>
+        <%= nav_link raw("<i class='fa fa-calendar'></i> Changelog"), "/changelog" %></li>
+
         <!--
         <li><a href="bootstrap-grid.html"><i class="fa fa-table"></i> Bootstrap Grid</a></li>
         -->

@@ -16,7 +16,16 @@ class PlayersController < ApplicationController
     end
   end
 
-  def howto
+  def help
+  end
+
+  def about
+  end
+
+  def contact
+  end
+
+  def changelog
   end
 
 end
