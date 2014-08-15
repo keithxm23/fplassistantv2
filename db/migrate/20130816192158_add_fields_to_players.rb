@@ -1,0 +1,43 @@
+class AddFieldsToPlayers < ActiveRecord::Migration
+  def change
+    add_column :players, :elementid, :integer
+    add_column :players, :transfers_out, :integer
+    add_column :players, :code, :integer
+    add_column :players, :event_total, :integer
+    add_column :players, :last_season_points, :integer
+    add_column :players, :squad_number, :integer
+    add_column :players, :transfer_balance, :integer
+    add_column :players, :news_updated, :date
+    add_column :players, :news_added, :date
+    add_column :players, :event_cost, :integer
+    add_column :players, :web_name, :string
+    add_column :players, :in_dreamteam, :boolean
+    add_column :players, :team_code, :integer
+    add_column :players, :shirt_image_url, :text
+    add_column :players, :transfers_out_event, :integer
+    add_column :players, :element_type_id, :integer
+    add_column :players, :max_cost, :integer
+    add_column :players, :selected, :integer
+    add_column :players, :min_cost, :integer
+    add_column :players, :total_points, :integer
+    add_column :players, :type_name, :string
+    add_column :players, :team_name, :string
+    add_column :players, :status, :string
+    add_column :players, :added, :date
+    add_column :players, :form, :integer
+    add_column :players, :shirt_mobile_image_url, :text
+    add_column :players, :current_fixture, :string
+    add_column :players, :now_cost, :integer
+    add_column :players, :points_per_game, :integer
+    add_column :players, :transfers_in, :integer
+    add_column :players, :news, :text
+    add_column :players, :original_cost, :integer
+    add_column :players, :event_points, :integer
+    add_column :players, :news_return, :date
+    add_column :players, :next_fixture, :string
+    add_column :players, :transfers_in_event, :integer
+    add_column :players, :selected_by, :float
+    add_column :players, :team_id, :integer
+    add_column :players, :photo_mobile_url, :text
+  end
+end
