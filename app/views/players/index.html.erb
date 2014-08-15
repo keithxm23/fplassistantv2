@@ -38,6 +38,22 @@
   <div class="col-lg-6">
     <div class="panel panel-primary">
       <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-ambulance"></i> Injuries</h3>
+      </div>
+      <div class="panel-body">
+
+        <div style="width:460; text-align:center; font-family:Verdana; font-size:11px;">
+          <iframe src="http://www.physioroom.com/affiliate/common/syndicate_table2.php?w=470" width="460" height="1200" frameborder="0"></iframe>
+          <p>Visit <a href="http://www.physioroom.com" rel="nofollow" target="_blank">PhysioRoom.com</a> for more injury information</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
         <h3 class="panel-title"><i class="fa fa-trophy"></i> Standings</h3>
       </div>
       <div class="panel-body">
@@ -60,25 +76,12 @@
       </div>
     </div>
   </div>
+
 </div>
 
 <div class="row">
 
-  <div class="col-lg-6">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-ambulance"></i> Injuries</h3>
-      </div>
-      <div class="panel-body">
 
-        <div style="width:460; text-align:center; font-family:Verdana; font-size:11px;">
-          <iframe src="http://www.physioroom.com/affiliate/common/syndicate_table2.php?w=470" width="460" height="2200" frameborder="0"></iframe>
-          <p>Visit <a href="http://www.physioroom.com" rel="nofollow" target="_blank">PhysioRoom.com</a> for more injury information</p>
-        </div>
-
-      </div>
-    </div>
-  </div>
 
   <div class="col-lg-6">
   </div>
@@ -112,6 +115,62 @@
     .searchFilter select, input {
       width: auto !important;
     }
+    .short_team_name{
+      -webkit-border-radius: 99px;
+      -moz-border-radius: 99px;
+      border-radius: 99px;
+      font-weight: bold;
+    }
+
+    .next_team{
+      display:inline-block;
+      font-weight: bold;
+      -webkit-border-radius: 99px 0px 0px 99px;
+      -moz-border-radius: 99px 0px 0px 99px;
+      border-radius: 99px 0px 0px 99px;
+      width: 30px;
+      margin-left: 5px;
+    }
+
+    .next_at{
+      display:inline-block;
+      font-weight: bold;
+      -webkit-border-radius: 0px 99px 99px 0px;
+      -moz-border-radius: 0px 99px 99px 0px;
+      border-radius: 0px 99px 99px 0px;
+      width: 13px;
+    }
+
+    .A{
+      background-color:#8b0000;
+    }
+
+    .H{
+      background-color:#517a00;
+    }
+
+    .ARS{
+      background-color:#c42222;
+    }
+    .MUN{
+      background-color:#aa0619;
+      color:#f1d00e;
+    }
+    .CRY{
+      background-color:#5971b9;
+    }
+    .TOT{
+      background-color:#f5f5f5;
+      color:#10214a;
+    }
+    .EVE{
+      background-color:#0031a1;
+      color:#f1d00e;
+    }
+    .LEI{
+      background-color:#023b9d;
+    }
+
 
     .ui-jqgrid tr.jqgrow td { height: 10px; padding-top: 0px;}
   </style>
@@ -142,6 +201,7 @@
       "Burnley":"BUR",
       "Hull":"HUL"
     };
+
   $.jgrid.extend({
     columnChooser : function(opts) {
         var self = this;
@@ -382,7 +442,7 @@
             { name: "form", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
             { name: "total_points", template: IntTemplate },
             { name: "points_per_game", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
-            { name: "selected_by", template: numberTemplate},
+            { name: "selected_by", template: numberTemplate, hidden:true},
             { name: "current_fixture", hidden: true},
             { name: "next_fixture", width:50, align:'center', formatter: nextFixtureFormatter, hidden:true },
             { name: "minutes", template: IntTemplate },
@@ -393,13 +453,13 @@
             { name: "own_goals", template: IntTemplate, hidden:true },
             { name: "penalties_saved", template: IntTemplate, hidden:true },
             { name: "penalties_missed", template: IntTemplate, hidden:true },
-            { name: "yellow_cards", template: IntTemplate },
-            { name: "red_cards", template: IntTemplate },
+            { name: "yellow_cards", template: IntTemplate, hidden:true },
+            { name: "red_cards", template: IntTemplate, hidden:true },
             { name: "saves", template: IntTemplate, hidden:true },
             { name: "bonus", template: IntTemplate },
-            { name: "ea_index", template: IntTemplate },
-            { name: "bps", template: IntTemplate },
-            { name: "summary", align:'center', width:130}
+            { name: "ea_index", template: IntTemplate, hidden:true },
+            { name: "bps", template: IntTemplate, hidden:true },
+            { name: "summary", align:'center', width:150, formatter:summaryFormatter}
           ],
           toppager:true,
           rownumbers: true,
@@ -488,12 +548,28 @@ jQuery("#filterGrid").jqGrid('navButtonAdd', '#filterGrid_toppager', {
 
 
     function teamNameFormatter(cellvalue, options, rowObject){
-      return short_teamname[cellvalue];
+      var name = short_teamname[cellvalue];
+      return "<div class='short_team_name "+name+"'>"+name+"</div>";
     }
 
     function playerPositionFormatter(cellvalue, options, rowObject){
       var position_short = {"Goalkeeper":"G", "Forward":"F", "Midfielder":"M", "Defender":"D"};
       return position_short[cellvalue];
+    }
+
+    function summaryFormatter(cellvalue, options, rowObject){
+      var fixs = cellvalue.split(', ');
+      var html = "<div style='overflow:auto; width:150px'>";
+      for(i=0; i< fixs.length; i++){
+        var fix = fixs[i].split('-');
+        var tm = fix[0];
+        var at = fix[1];
+
+        html += "<div class='next_team "+tm+" '>"+tm+"</div>";
+        html += "<div class='next_at "+at+" '>"+at+"</div>";
+      }
+      html += "</div>"
+      return html;
     }
 
   });
