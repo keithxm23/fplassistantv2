@@ -14,18 +14,24 @@
 
 <div class="row">
   <div class="col-lg-12">
-    <div id="gridContainer">
-      <table id="filterGrid">
-        <tr>
-          <td></td>
-        </tr>
-      </table>
-      <div id="pager"></div>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-group"></i> Player Grid</h3>
+      </div>
+      <div class="panel-body">
+
+        <div id="gridContainer">
+          <table id="filterGrid">
+            <tr>
+              <td></td>
+            </tr>
+          </table>
+          <div id="pager"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<br/>
-<br/>
 
 <div class="row">
 
@@ -65,8 +71,8 @@
       </div>
       <div class="panel-body">
 
-        <div style="width:490px; text-align:center; font-family:Verdana; font-size:11px;">
-          <iframe src="http://www.physioroom.com/affiliate/common/syndicate_table2.php?w=470" width="490" height="2200" frameborder="0"></iframe>
+        <div style="width:460; text-align:center; font-family:Verdana; font-size:11px;">
+          <iframe src="http://www.physioroom.com/affiliate/common/syndicate_table2.php?w=470" width="460" height="2200" frameborder="0"></iframe>
           <p>Visit <a href="http://www.physioroom.com" rel="nofollow" target="_blank">PhysioRoom.com</a> for more injury information</p>
         </div>
 
@@ -75,10 +81,7 @@
   </div>
 
   <div class="col-lg-6">
-
   </div>
-
-
 
 </div>
 
@@ -418,7 +421,7 @@
             $(this).jqGrid('viewGridRow', id, {caption: "Player Details"});
                 },
 */
-          caption: "FPL Assitant Grid"
+          caption: ""
       });
   jQuery("#filterGrid").jqGrid('filterToolbar',{searchOperators : true});
 
@@ -473,7 +476,7 @@ jQuery("#filterGrid").jqGrid('navButtonAdd', '#filterGrid_toppager', {
     }
 
     function statusFormatter(cellvalue, options, rowObject){
-      var statuses = {"a":"<i class='fa fa-thumbs-up'></i>","d":"<i class='fa fa-stethoscope'></i>","i":"<i class='fa fa-ambulance'></i>","n":"<i class='fa fa-suitcase'></i>","s":"<i class='fa fa-ban'></i>"};
+      var statuses = {"a":"<i style='color:#77b300' class='fa fa-thumbs-up'></i>","d":"<i style='color:#ff8800' class='fa fa-stethoscope'></i>","i":"<i style='color:#cc0000' class='fa fa-ambulance'></i>","n":"<i style='color:#cc0000' class='fa fa-suitcase'></i>","s":"<i style='color:#cc0000' class='fa fa-ban'></i>"};
       return statuses[cellvalue];
     }
 
