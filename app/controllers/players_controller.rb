@@ -2,7 +2,7 @@ class PlayersController < ApplicationController
   # GET /players
   # GET /players.json
   def index
-    @players = Player.where("status != 'u'")
+    @players = Player.where("status != 'u'").order("total_points DESC")
 
     jsondata = {}
     jsondata['total'] = "50"
