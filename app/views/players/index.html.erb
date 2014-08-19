@@ -69,8 +69,10 @@
           <h3 class="panel-title"><i class="fa fa-trophy"></i> Standings</h3>
         </div>
         <div class="panel-body">
+          <iframe src="http://www.tablesleague.com/iframe?width=520&height=400&font_name=Tahoma&position=1&font_size=12&team_link=1&link_color=FFFFFF&games=1&wins=1&draws=1&lost=1&goals=1&goals_against=1&gd=1&points=1&next=1&form=1&font_size=12&font_color=FFFFFF&bg_color=222222&header_font_color=222222&header_bg_color=222222&bg_col=222222&font_color_col=FFFFFF&highlight=333333&hover=222222&league_header=1&league=l_145&team="
+                    style="width:100%" height="510" frameborder="0" scrolling="no">
+          </iframe>
 
-          Fill
 
         </div>
       </div>
@@ -476,13 +478,12 @@
       $("#filterGrid").jqGrid({
           url: "/players.json",
           datatype: "json",
-          colNames: ["Picture", "Name", "First Name", "Last Name", "Position", "Team", "Status",
+          colNames: ["Name", "First Name", "Last Name", "Position", "Team", "Status",
            "News", "&pound;", "F", "TS", "PPG", "TSB", "CF", "NF", "MP",
            "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S", "B", "ESP",
            "BPS","Next 3 Fixtures"
           ],
           colModel: [
-            { name: "photo", width: 50, align: 'center', formatter: playerPicFormatter, search: false, hidden:true},
             { name: "web_name", width: 100},
             { name: "first_name", hidden: true, width: 120},
             { name: "second_name", hidden: true, width: 120 },
