@@ -48,7 +48,7 @@
               <td></td>
             </tr>
           </table>
-          <div id="pager"></div>
+          <div id="shortlistGrid_pager"></div>
         </div>
       </div>
     </div>
@@ -638,6 +638,8 @@
           caption: ""
       });
 
+      $("#cb_"+$("#filterGrid")[0].id).hide();
+
       jQuery("#filterGrid").jqGrid('filterToolbar',{searchOperators : true});
 
       //For docs on options set, refer: http://www.trirand.com/jqgridwiki/doku.php?id=wiki:singe_searching#options
@@ -726,7 +728,14 @@
              searchoptions:{sopt:['eq','ne'], value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"},
              editoptions:{value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"}
             },
-            { name: "status_unformatted", width: 50, align: 'center', formatter: statusFormatter},
+            { name: "status_unformatted", width: 50, align: 'center', formatter: statusFormatter,
+              stype:'select', edittype: 'select',
+                    searchoptions:{sopt:['eq','ne'], value:":All;a:Avaliable;d:Maybe Injured;i:Injured;n:On Loan;s:Suspended"},
+                    editoptions:{value:":All;a:Avaliable;d:Maybe Injured;i:Injured;n:On Loan;s:Suspended"},
+                    cellattr: function (rowId, val, rawObject, cm, rdata) {
+                      return 'title="' + rawObject.news  + '"';
+                    }
+            },
             { name: "news", hidden: true},
             { name: "now_cost_float", template: numberTemplate },
             { name: "form", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
@@ -753,7 +762,7 @@
           toppager:true,
           rownumbers: true,
           height: 'auto',
-          pager: "#pager",
+          pager: "#shortlistGrid_pager",
           rowNum: 10,
           rowList: [10, 20, 30],
           sortname: "now_cost_float",
@@ -771,7 +780,7 @@
       jQuery("#shortlistGrid").jqGrid('filterToolbar',{searchOperators : true});
 
       //For docs on options set, refer: http://www.trirand.com/jqgridwiki/doku.php?id=wiki:singe_searching#options
-      jQuery("#shortlistGrid").jqGrid('navGrid','#shortlistGrid_pager',{
+      jQuery("#shortlistGrid").jqGrid('navGrid','#shortlistGrid_pager2',{
         del:false, add:false, edit:false, cloneToTop:true, refreshtext:'Reset',
          searchtext:'Query'},{},{},{},{
            multipleSearch:true,
@@ -822,7 +831,6 @@
   });
 
   $("#getSelected").click(function(){
-      console.log(idsOfSelectedRows);
       var shortlisted = [];
       //pull data from filterGrid
       for (var i=0, il=idsOfSelectedRows.length; i < il; i++) {
@@ -832,7 +840,6 @@
       //clear data in shortlist
       $('#shortlistGrid').jqGrid('clearGridData');
 
-      console.log(shortlisted);
       //push data to shortlist grid
       for(var i=0; i<=shortlisted.length; i++){
         $("#shortlistGrid").jqGrid('addRowData',i+1,shortlisted[i]);
