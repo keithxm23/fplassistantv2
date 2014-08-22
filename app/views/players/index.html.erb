@@ -1,6 +1,6 @@
   <div class="row">
     <div class="col-lg-12">
-      <h1>Player <small>Grid</small></h1>
+      <h1>FPL <small>Assistant</small></h1>
       <!--
       <div class="alert alert-dismissable alert-warning">
         <button data-dismiss="alert" class="close" type="button">×</button>
@@ -16,12 +16,33 @@
   <div class="col-lg-12">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-group"></i> Player Grid</h3>
+        <h3 class="panel-title"><i class="fa fa-group"></i> All Players</h3>
       </div>
       <div class="panel-body">
 
         <div id="gridContainer">
           <table id="filterGrid">
+            <tr>
+              <td></td>
+            </tr>
+          </table>
+          <div id="pager"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-star"></i> Player Shortlist</h3>
+      </div>
+      <div class="panel-body">
+
+        <div id="gridContainer">
+          <table id="shortlistGrid">
             <tr>
               <td></td>
             </tr>
@@ -468,7 +489,7 @@
     }
 });
 
-
+  idsOfSelectedRows = [];
   $(function () {
       numberSearchOptions = ['eq', 'ne', 'le', 'ge', 'nu', 'nn'],
       numberTemplate = {formatter: 'number', align: 'right', sorttype: 'float', width: 50,
@@ -545,102 +566,277 @@
           ignoreCase: true,
           sortable: true,
           searchOperators: true,
-          /*
-          onSelectRow: function (id) {
-            $(this).jqGrid('viewGridRow', id, {caption: "Player Details"});
-                },
-*/
+          multiselect: true,
+          //http://stackoverflow.com/questions/8172186/jqgrid-saving-checkbox-selected-state
+          onSelectRow: function (id, isSelected) {
+              var p = this.p, item = p.data[p._index[id]], i = $.inArray(id, idsOfSelectedRows);
+              item.cb = isSelected;
+              if (!isSelected && i >= 0) {
+                  idsOfSelectedRows.splice(i,1); // remove id from the list
+              } else if (i < 0) {
+                  idsOfSelectedRows.push(id);
+              }
+          },
+          loadComplete: function () {
+              var p = this.p, data = p.data, item, $this = $(this), index = p._index, rowid, i, selCount;
+              for (i = 0, selCount = idsOfSelectedRows.length; i < selCount; i++) {
+                  rowid = idsOfSelectedRows[i];
+                  item = data[index[rowid]];
+                  if ('cb' in item && item.cb) {
+                      $this.jqGrid('setSelection', rowid, false);
+                  }
+              }
+          },
           caption: ""
       });
-  jQuery("#filterGrid").jqGrid('filterToolbar',{searchOperators : true});
+
+      jQuery("#filterGrid").jqGrid('filterToolbar',{searchOperators : true});
 
       //For docs on options set, refer: http://www.trirand.com/jqgridwiki/doku.php?id=wiki:singe_searching#options
-      jQuery("#filterGrid").jqGrid('navGrid','#pager',{del:false,add:false,edit:false,cloneToTop:true, refreshtext:'Reset', searchtext:'Query'},{},{},{},{multipleSearch:true,
-                                                                                                 width: 600,                                                                                          closeAfterSearch: true,
-                                                                                                 top: 300,
-                                                                                                 left: 100,
-                                                                                                 searchOnEnter: true});
-
-    //jQuery("#filterGrid").jqGrid('columnChooser',{modal: true});
+      jQuery("#filterGrid").jqGrid('navGrid','#pager',{
+        del:false, add:false, edit:false, cloneToTop:true, refreshtext:'Reset',
+         searchtext:'Query'},{},{},{},{
+           multipleSearch:true,
+           width: 600,
+           closeAfterSearch: true,
+           top: 300,
+           left: 100,
+           searchOnEnter: true
+         }
+       );
 
     $.extend(true, $.ui.multiselect, {
     locale: {
         addAll: 'Make all visible',
         removeAll: 'Hide All',
         itemsCount: 'Avlialble Columns'
-    }
-});
-$.extend(true, $.jgrid.col, {
-    width: 470,
-    modal: true,
-    msel_opts: {dividerLocation: 0.5},
-    dialog_opts: {
-        minWidth: 470,
-        show: 'fade',
-        hide: 'fade'
-    }
-});
-
-jQuery("#filterGrid").jqGrid('navButtonAdd', '#pager', {
-    caption: "Show/hide columns",
-    buttonicon: "ui-icon-calculator",
-    title: "Choose columns",
-    onClickButton: function () {
-        $(this).jqGrid('columnChooser');
-    }
-});
-
-jQuery("#filterGrid").jqGrid('navButtonAdd', '#filterGrid_toppager', {
-    caption: "Show/hide columns",
-    buttonicon: "ui-icon-calculator",
-    title: "Choose columns",
-    onClickButton: function () {
-        $(this).jqGrid('columnChooser');
-    }
-});
-    function playerPicFormatter(cellvalue, options, rowObject)
-    {
-      var html = "<img src='http://cdn.ismfg.net/static/plfpl/img/shirts/photos/"+cellvalue+"'/>";
-      return html;
-    }
-
-    function statusFormatter(cellvalue, options, rowObject){
-      var statuses = {"a":"<i style='color:#77b300' class='fa fa-thumbs-up'></i>","d":"<i style='color:#ff8800' class='fa fa-stethoscope'></i>","i":"<i style='color:#cc0000' class='fa fa-ambulance'></i>","n":"<i style='color:#cc0000' class='fa fa-suitcase'></i>","s":"<i style='color:#cc0000' class='fa fa-ban'></i>"};
-      return statuses[cellvalue];
-    }
-
-    function nextFixtureFormatter(cellvalue, options, rowObject){
-      var tmp = cellvalue.split(' (');
-      var html = short_teamname[tmp[0]] + "-" + tmp[1][0];
-      return html;
-    }
-
-
-    function teamNameFormatter(cellvalue, options, rowObject){
-      var name = short_teamname[cellvalue];
-      return "<div class='short_team_name "+name+"'>"+name+"</div>";
-    }
-
-    function playerPositionFormatter(cellvalue, options, rowObject){
-      var position_short = {"Goalkeeper":"G", "Forward":"F", "Midfielder":"M", "Defender":"D"};
-      return position_short[cellvalue];
-    }
-
-    function summaryFormatter(cellvalue, options, rowObject){
-      var fixs = cellvalue.split(', ');
-      var html = "<div style='overflow:auto; width:150px'>";
-      for(i=0; i< fixs.length; i++){
-        var fix = fixs[i].split('-');
-        var tm = fix[0];
-        var at = fix[1];
-
-        html += "<div class='next_team '>"+tm+"</div>";
-        html += "<div class='next_at "+at+" '>"+at+"</div>";
       }
-      html += "</div>"
-      return html;
-    }
+    });
 
+
+    $.extend(true, $.jgrid.col, {
+      width: 470,
+      modal: true,
+      msel_opts: {dividerLocation: 0.5},
+      dialog_opts: {
+          minWidth: 470,
+          show: 'fade',
+          hide: 'fade'
+      }
+    });
+
+  jQuery("#filterGrid").jqGrid('navButtonAdd', '#pager', {
+      caption: "Show/hide columns",
+      buttonicon: "ui-icon-calculator",
+      title: "Choose columns",
+      onClickButton: function () {
+          $(this).jqGrid('columnChooser');
+      }
   });
+
+  jQuery("#filterGrid").jqGrid('navButtonAdd', '#filterGrid_toppager', {
+      caption: "Show/hide columns",
+      buttonicon: "ui-icon-calculator",
+      title: "Choose columns",
+      onClickButton: function () {
+          $(this).jqGrid('columnChooser');
+      }
+  });
+
+
+// ****************************************************************************
+// ****************************************************************************
+// ****************************************************************************
+// ****************************************************************************
+// **************************** START SHORTLIST GRID **************************
+// ****************************************************************************
+// ****************************************************************************
+// ****************************************************************************
+// ****************************************************************************
+// ****************************************************************************
+
+
+
+      $("#shortlistGrid").jqGrid({
+          datatype: "local",
+          colNames: ["Name", "First Name", "Last Name", "Position", "Team", "Status",
+           "News", "&pound;", "F", "TS", "PPG", "TSB", "CF", "NF", "MP",
+           "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S", "B", "ESP",
+           "BPS","Next 3 Fixtures"
+          ],
+          colModel: [
+            { name: "web_name", width: 100},
+            { name: "first_name", hidden: true, width: 120},
+            { name: "second_name", hidden: true, width: 120 },
+            { name: "type_name", width: 50, align: 'center', formatter: playerPositionFormatter,
+             stype:'select', edittype: 'select',
+             searchoptions:{sopt:['eq','ne'], value:":All;Goalkeeper:GK;Defender:DEF;Midfielder:MID;Forward:FWD"},
+             editoptions:{value:":All;Goalkeeper:GK;Defender:DEF;Midfielder:MID;Forward:FWD"}
+            },
+            { name: "team_name", width: 50, align: 'center', formatter: teamNameFormatter,
+             stype:'select', edittype: 'select',
+             searchoptions:{sopt:['eq','ne'], value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"},
+             editoptions:{value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"}
+            },
+            { name: "status", width: 50, align: 'center', formatter: statusFormatter,
+              stype:'select', edittype: 'select',
+                    searchoptions:{sopt:['eq','ne'], value:":All;a:Avaliable;d:Maybe Injured;i:Injured;n:On Loan;s:Suspended"},
+                    editoptions:{value:":All;a:Avaliable;d:Maybe Injured;i:Injured;n:On Loan;s:Suspended"},
+                    cellattr: function (rowId, val, rawObject, cm, rdata) {
+                      return 'title="' + rawObject.news  + '"';
+                    }
+            },
+            { name: "news", hidden: true},
+            { name: "now_cost_float", template: numberTemplate },
+            { name: "form", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
+            { name: "total_points", template: IntTemplate },
+            { name: "points_per_game", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
+            { name: "selected_by", template: numberTemplate, hidden:true},
+            { name: "current_fixture", hidden: true},
+            { name: "next_fixture", width:50, align:'center', formatter: nextFixtureFormatter, hidden:true },
+            { name: "minutes", template: IntTemplate },
+            { name: "goals_scored", template: IntTemplate },
+            { name: "assists", template: IntTemplate },
+            { name: "clean_sheets", template: IntTemplate, hidden:true },
+            { name: "goals_conceded", template: IntTemplate, hidden:true },
+            { name: "own_goals", template: IntTemplate, hidden:true },
+            { name: "penalties_saved", template: IntTemplate, hidden:true },
+            { name: "penalties_missed", template: IntTemplate, hidden:true },
+            { name: "yellow_cards", template: IntTemplate, hidden:true },
+            { name: "red_cards", template: IntTemplate, hidden:true },
+            { name: "saves", template: IntTemplate, hidden:true },
+            { name: "bonus", template: IntTemplate },
+            { name: "ea_index", template: IntTemplate, hidden:true },
+            { name: "bps", template: IntTemplate, hidden:true },
+            { name: "summary", align:'center', width:150, formatter:summaryFormatter, search:false}
+          ],
+          toppager:true,
+          rownumbers: true,
+          height: 'auto',
+          pager: "#pager",
+          rowNum: 10,
+          rowList: [10, 20, 30],
+          sortname: "now_cost_float",
+          sortorder: "desc",
+          viewrecords: true,
+          gridview: true,
+          autoencode: true,
+          loadonce: true,
+          ignoreCase: true,
+          sortable: true,
+          searchOperators: true,
+          caption: ""
+      });
+
+      jQuery("#shortlistGrid").jqGrid('filterToolbar',{searchOperators : true});
+
+      //For docs on options set, refer: http://www.trirand.com/jqgridwiki/doku.php?id=wiki:singe_searching#options
+      jQuery("#shortlistGrid").jqGrid('navGrid','#shortlistGrid_pager',{
+        del:false, add:false, edit:false, cloneToTop:true, refreshtext:'Reset',
+         searchtext:'Query'},{},{},{},{
+           multipleSearch:true,
+           width: 600,
+           closeAfterSearch: true,
+           top: 300,
+           left: 100,
+           searchOnEnter: true
+         }
+       );
+
+    $.extend(true, $.ui.multiselect, {
+    locale: {
+        addAll: 'Make all visible',
+        removeAll: 'Hide All',
+        itemsCount: 'Avlialble Columns'
+      }
+    });
+
+
+    $.extend(true, $.jgrid.col, {
+      width: 470,
+      modal: true,
+      msel_opts: {dividerLocation: 0.5},
+      dialog_opts: {
+          minWidth: 470,
+          show: 'fade',
+          hide: 'fade'
+      }
+    });
+
+  jQuery("#shortlistGrid").jqGrid('navButtonAdd', '#shortlistGrid_pager', {
+      caption: "Show/hide columns",
+      buttonicon: "ui-icon-calculator",
+      title: "Choose columns",
+      onClickButton: function () {
+          $(this).jqGrid('columnChooser');
+      }
+  });
+
+  jQuery("#shortlistGrid").jqGrid('navButtonAdd', '#shortlistGrid_toppager', {
+      caption: "Show/hide columns",
+      buttonicon: "ui-icon-calculator",
+      title: "Choose columns",
+      onClickButton: function () {
+          $(this).jqGrid('columnChooser');
+      }
+  });
+
+
+// ****************************************************************************
+// ****************************************************************************
+// ****************************************************************************
+// ****************************************************************************
+// **************************** START SHORTLIST GRID **************************
+// ****************************************************************************
+// ****************************************************************************
+// ****************************************************************************
+// ****************************************************************************
+// ****************************************************************************
+
+
+  function playerPicFormatter(cellvalue, options, rowObject)
+  {
+    var html = "<img src='http://cdn.ismfg.net/static/plfpl/img/shirts/photos/"+cellvalue+"'/>";
+    return html;
+  }
+
+  function statusFormatter(cellvalue, options, rowObject){
+    var statuses = {"a":"<i style='color:#77b300' class='fa fa-thumbs-up'></i>","d":"<i style='color:#ff8800' class='fa fa-stethoscope'></i>","i":"<i style='color:#cc0000' class='fa fa-ambulance'></i>","n":"<i style='color:#cc0000' class='fa fa-suitcase'></i>","s":"<i style='color:#cc0000' class='fa fa-ban'></i>"};
+    return statuses[cellvalue];
+  }
+
+  function nextFixtureFormatter(cellvalue, options, rowObject){
+    var tmp = cellvalue.split(' (');
+    var html = short_teamname[tmp[0]] + "-" + tmp[1][0];
+    return html;
+  }
+
+
+  function teamNameFormatter(cellvalue, options, rowObject){
+    var name = short_teamname[cellvalue];
+    return "<div class='short_team_name "+name+"'>"+name+"</div>";
+  }
+
+  function playerPositionFormatter(cellvalue, options, rowObject){
+    var position_short = {"Goalkeeper":"G", "Forward":"F", "Midfielder":"M", "Defender":"D"};
+    return position_short[cellvalue];
+  }
+
+  function summaryFormatter(cellvalue, options, rowObject){
+    var fixs = cellvalue.split(', ');
+    var html = "<div style='overflow:auto; width:150px'>";
+    for(i=0; i< fixs.length; i++){
+      var fix = fixs[i].split('-');
+      var tm = fix[0];
+      var at = fix[1];
+
+      html += "<div class='next_team '>"+tm+"</div>";
+      html += "<div class='next_at "+at+" '>"+at+"</div>";
+    }
+    html += "</div>"
+    return html;
+  }
+
+});
   </script>
 <% end %>
