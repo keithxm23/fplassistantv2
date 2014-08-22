@@ -28,6 +28,7 @@
           </table>
           <div id="pager"></div>
         </div>
+        <button id="getSelected" type="button" class="btn btn-primary">Shortlist Selected Players</button>
       </div>
     </div>
   </div>
@@ -293,6 +294,40 @@
       "Hull":"HUL"
     };
 
+    var long_teamname = {
+      "ARS" : "Arsenal",
+      "CRY" : "Crystal Palace",
+      "EVE" : "Everton",
+      "LEI" : "Leicester",
+      "TOT" : "Spurs",
+      "SOU" : "Southampton",
+      "CHE" : "Chelsea",
+      "MCI" : "Man City",
+      "MUN" : "Man Utd",
+      "LIV" : "Liverpool",
+      "SWA" : "Swansea",
+      "NEW" : "Newcastle",
+      "QPR" : "QPR",
+      "STK" : "Stoke",
+      "SUN" : "Sunderland",
+      "WHU" : "West Ham",
+      "AVL" : "Aston Villa",
+      "WBA" : "West Brom",
+      "BUR" : "Burnley",
+      "HUL" : "Hull"
+      };
+
+    var position_short = {"Goalkeeper":"G", "Forward":"F", "Midfielder":"M", "Defender":"D"};
+    var position_long = {"G":"Goalkeeper", "F":"Forward", "M":"Midfielder", "D":"Defender"};
+
+    var statuses = {
+      "a":"<i style='color:#77b300' class='fa fa-thumbs-up'></i>",
+      "d":"<i style='color:#ff8800' class='fa fa-stethoscope'></i>",
+      "i":"<i style='color:#cc0000' class='fa fa-ambulance'></i>",
+      "n":"<i style='color:#cc0000' class='fa fa-suitcase'></i>",
+      "s":"<i style='color:#cc0000' class='fa fa-ban'></i>"
+      };
+
   $.jgrid.extend({
     columnChooser : function(opts) {
         var self = this;
@@ -500,25 +535,31 @@
       $("#filterGrid").jqGrid({
           url: "/players.json",
           datatype: "json",
-          colNames: ["Name", "First Name", "Last Name", "Position", "Team", "Status",
-           "News", "&pound;", "F", "TS", "PPG", "TSB", "CF", "NF", "MP",
+          colNames: ["Name", "First Name", "Last Name", "Position", "Position_unformatted",
+           "Team", "Team_unformatted", "Status", "Status_unformatted",
+           "News", "&pound;", "F", "TS", "PPG", "TSB", "NF", "NF_unformatted", "MP",
            "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S", "B", "ESP",
-           "BPS","Next 3 Fixtures"
+           "BPS", "Next 3 Fixtures", "Next 3 Fixtures_unformatted"
           ],
           colModel: [
             { name: "web_name", width: 100},
             { name: "first_name", hidden: true, width: 120},
             { name: "second_name", hidden: true, width: 120 },
+
             { name: "type_name", width: 50, align: 'center', formatter: playerPositionFormatter,
              stype:'select', edittype: 'select',
              searchoptions:{sopt:['eq','ne'], value:":All;Goalkeeper:GK;Defender:DEF;Midfielder:MID;Forward:FWD"},
              editoptions:{value:":All;Goalkeeper:GK;Defender:DEF;Midfielder:MID;Forward:FWD"}
             },
+            { name: "type_name_unformatted", jsonmap: "type_name", hidden:true, hidedlg: true},
+
             { name: "team_name", width: 50, align: 'center', formatter: teamNameFormatter,
              stype:'select', edittype: 'select',
              searchoptions:{sopt:['eq','ne'], value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"},
              editoptions:{value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"}
             },
+            { name: "team_name_unformatted", jsonmap: "team_name", hidden:true, hidedlg: true},
+
             { name: "status", width: 50, align: 'center', formatter: statusFormatter,
               stype:'select', edittype: 'select',
                     searchoptions:{sopt:['eq','ne'], value:":All;a:Avaliable;d:Maybe Injured;i:Injured;n:On Loan;s:Suspended"},
@@ -527,14 +568,18 @@
                       return 'title="' + rawObject.news  + '"';
                     }
             },
+            { name: "status_unformatted", jsonmap: "status", hidden:true, hidedlg: true},
+
             { name: "news", hidden: true},
             { name: "now_cost_float", template: numberTemplate },
             { name: "form", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
             { name: "total_points", template: IntTemplate },
             { name: "points_per_game", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
             { name: "selected_by", template: numberTemplate, hidden:true},
-            { name: "current_fixture", hidden: true},
+
             { name: "next_fixture", width:50, align:'center', formatter: nextFixtureFormatter, hidden:true },
+            { name: "next_fixture_unformatted", jsonmap: "next_fixture", hidden:true, hidedlg: true},
+
             { name: "minutes", template: IntTemplate },
             { name: "goals_scored", template: IntTemplate },
             { name: "assists", template: IntTemplate },
@@ -549,7 +594,10 @@
             { name: "bonus", template: IntTemplate },
             { name: "ea_index", template: IntTemplate, hidden:true },
             { name: "bps", template: IntTemplate, hidden:true },
-            { name: "summary", align:'center', width:150, formatter:summaryFormatter, search:false}
+
+            { name: "summary", align:'center', width:150, formatter:summaryFormatter, search:false},
+            { name: "summary_unformatted", jsonmap: "summary", hidden:true, hidedlg: true}
+
           ],
           toppager:true,
           rownumbers: true,
@@ -660,7 +708,7 @@
       $("#shortlistGrid").jqGrid({
           datatype: "local",
           colNames: ["Name", "First Name", "Last Name", "Position", "Team", "Status",
-           "News", "&pound;", "F", "TS", "PPG", "TSB", "CF", "NF", "MP",
+           "News", "&pound;", "F", "TS", "PPG", "TSB", "NF", "MP",
            "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S", "B", "ESP",
            "BPS","Next 3 Fixtures"
           ],
@@ -668,32 +716,24 @@
             { name: "web_name", width: 100},
             { name: "first_name", hidden: true, width: 120},
             { name: "second_name", hidden: true, width: 120 },
-            { name: "type_name", width: 50, align: 'center', formatter: playerPositionFormatter,
+            { name: "type_name_unformatted", width: 50, align: 'center', formatter: playerPositionFormatter,
              stype:'select', edittype: 'select',
              searchoptions:{sopt:['eq','ne'], value:":All;Goalkeeper:GK;Defender:DEF;Midfielder:MID;Forward:FWD"},
              editoptions:{value:":All;Goalkeeper:GK;Defender:DEF;Midfielder:MID;Forward:FWD"}
             },
-            { name: "team_name", width: 50, align: 'center', formatter: teamNameFormatter,
+            { name: "team_name_unformatted", width: 50, align: 'center', formatter: teamNameFormatter,
              stype:'select', edittype: 'select',
              searchoptions:{sopt:['eq','ne'], value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"},
              editoptions:{value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"}
             },
-            { name: "status", width: 50, align: 'center', formatter: statusFormatter,
-              stype:'select', edittype: 'select',
-                    searchoptions:{sopt:['eq','ne'], value:":All;a:Avaliable;d:Maybe Injured;i:Injured;n:On Loan;s:Suspended"},
-                    editoptions:{value:":All;a:Avaliable;d:Maybe Injured;i:Injured;n:On Loan;s:Suspended"},
-                    cellattr: function (rowId, val, rawObject, cm, rdata) {
-                      return 'title="' + rawObject.news  + '"';
-                    }
-            },
+            { name: "status_unformatted", width: 50, align: 'center', formatter: statusFormatter},
             { name: "news", hidden: true},
             { name: "now_cost_float", template: numberTemplate },
             { name: "form", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
             { name: "total_points", template: IntTemplate },
             { name: "points_per_game", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
             { name: "selected_by", template: numberTemplate, hidden:true},
-            { name: "current_fixture", hidden: true},
-            { name: "next_fixture", width:50, align:'center', formatter: nextFixtureFormatter, hidden:true },
+            { name: "next_fixture_unformatted", width:50, align:'center', formatter: nextFixtureFormatter, hidden:true },
             { name: "minutes", template: IntTemplate },
             { name: "goals_scored", template: IntTemplate },
             { name: "assists", template: IntTemplate },
@@ -708,7 +748,7 @@
             { name: "bonus", template: IntTemplate },
             { name: "ea_index", template: IntTemplate, hidden:true },
             { name: "bps", template: IntTemplate, hidden:true },
-            { name: "summary", align:'center', width:150, formatter:summaryFormatter, search:false}
+            { name: "summary_unformatted", align:'center', width:150, formatter:summaryFormatter, search:false}
           ],
           toppager:true,
           rownumbers: true,
@@ -781,6 +821,26 @@
       }
   });
 
+  $("#getSelected").click(function(){
+      console.log(idsOfSelectedRows);
+      var shortlisted = [];
+      //pull data from filterGrid
+      for (var i=0, il=idsOfSelectedRows.length; i < il; i++) {
+          shortlisted.push($("#filterGrid").jqGrid('getLocalRow', idsOfSelectedRows[i]));
+      }
+
+      //clear data in shortlist
+      $('#shortlistGrid').jqGrid('clearGridData');
+
+      console.log(shortlisted);
+      //push data to shortlist grid
+      for(var i=0; i<=shortlisted.length; i++){
+        $("#shortlistGrid").jqGrid('addRowData',i+1,shortlisted[i]);
+      }
+
+    }
+  );
+
 
 // ****************************************************************************
 // ****************************************************************************
@@ -801,7 +861,6 @@
   }
 
   function statusFormatter(cellvalue, options, rowObject){
-    var statuses = {"a":"<i style='color:#77b300' class='fa fa-thumbs-up'></i>","d":"<i style='color:#ff8800' class='fa fa-stethoscope'></i>","i":"<i style='color:#cc0000' class='fa fa-ambulance'></i>","n":"<i style='color:#cc0000' class='fa fa-suitcase'></i>","s":"<i style='color:#cc0000' class='fa fa-ban'></i>"};
     return statuses[cellvalue];
   }
 
@@ -813,12 +872,11 @@
 
 
   function teamNameFormatter(cellvalue, options, rowObject){
-    var name = short_teamname[cellvalue];
-    return "<div class='short_team_name "+name+"'>"+name+"</div>";
+      var name = short_teamname[cellvalue];
+      return "<div class='short_team_name "+name+"'>"+name+"</div>";
   }
 
   function playerPositionFormatter(cellvalue, options, rowObject){
-    var position_short = {"Goalkeeper":"G", "Forward":"F", "Midfielder":"M", "Defender":"D"};
     return position_short[cellvalue];
   }
 
