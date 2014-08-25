@@ -178,6 +178,11 @@
       width: 13px;
     }
 
+    .status_div{
+      display:inline-block;
+      font-weight: bold;
+    }
+
     .A{
       background-color:#8b0000;
     }
@@ -271,6 +276,16 @@
 
 <% content_for :js do %>
   <script type="text/javascript">
+
+  //Max and min values for column value coloring received from controllers
+  var maxCost = <%= @vals.max_cost %>;
+  var minCost = <%= @vals.min_cost %>;
+  var maxTS = <%= @vals.max_ts %>;
+  var minTS = <%= @vals.min_ts %>;
+  var maxMins = <%= @vals.max_mins %>;
+  var minMins = <%= @vals.min_mins %>;
+
+
     var short_teamname = {
       "Arsenal":"ARS",
       "Crystal Palace":"CRY",
@@ -537,7 +552,8 @@
           datatype: "json",
           colNames: ["Name", "First Name", "Last Name", "Position", "Position_unformatted",
            "Team", "Team_unformatted", "Status", "Status_unformatted",
-           "News", "&pound;", "F", "TS", "PPG", "TSB", "NF", "NF_unformatted", "MP",
+           "News", "&pound;", "cost_unformatted", "F", "TS", "TS_unformatted",
+           "PPG", "TSB", "NF", "NF_unformatted", "MP",
            "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S", "B", "ESP",
            "BPS", "Next 3 Fixtures", "Next 3 Fixtures_unformatted"
           ],
@@ -571,9 +587,13 @@
             { name: "status_unformatted", jsonmap: "status", hidden:true, hidedlg: true},
 
             { name: "news", hidden: true},
-            { name: "now_cost_float", template: numberTemplate },
+            { name: "now_cost_float", template: numberTemplate, formatter:costFormatter },
+            { name: "now_cost_float_unformatted", template: numberTemplate, jsonmap: "now_cost_float", hidden:true, hidedlg: true },
+
             { name: "form", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
-            { name: "total_points", template: IntTemplate },
+            { name: "total_points", template: IntTemplate, formatter: TSFormatter },
+            { name: "total_points_unformatted", template: IntTemplate, jsonmap: "total_points", hidden:true, hidedlg: true },
+
             { name: "points_per_game", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
             { name: "selected_by", template: numberTemplate, hidden:true},
 
@@ -638,6 +658,7 @@
           caption: ""
       });
 
+      //Hiding the select-all checkbox
       $("#cb_"+$("#filterGrid")[0].id).hide();
 
       jQuery("#filterGrid").jqGrid('filterToolbar',{searchOperators : true});
@@ -737,7 +758,7 @@
                     }
             },
             { name: "news", hidden: true},
-            { name: "now_cost_float", template: numberTemplate },
+            { name: "now_cost_float_unformatted", template: numberTemplate },
             { name: "form", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
             { name: "total_points", template: IntTemplate },
             { name: "points_per_game", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
@@ -853,7 +874,7 @@
 // ****************************************************************************
 // ****************************************************************************
 // ****************************************************************************
-// **************************** START SHORTLIST GRID **************************
+// **************************** END SHORTLIST GRID **************************
 // ****************************************************************************
 // ****************************************************************************
 // ****************************************************************************
@@ -902,6 +923,70 @@
     return html;
   }
 
+  function summaryFormatter(cellvalue, options, rowObject){
+    var fixs = cellvalue.split(', ');
+    var html = "<div style='overflow:auto; width:150px'>";
+    for(i=0; i< fixs.length; i++){
+      var fix = fixs[i].split('-');
+      var tm = fix[0];
+      var at = fix[1];
+
+      html += "<div class='next_team '>"+tm+"</div>";
+      html += "<div class='next_at "+at+" '>"+at+"</div>";
+    }
+    html += "</div>"
+    return html;
+  }
+
+  function rgbify(maxval, minval, val, moreisgood) {
+      var intnsty = (val - minval) / (maxval - minval);
+      var r, g;
+      if (moreisgood) {
+          if (intnsty > 0.5) {
+              g = 255;
+              r = Math.round(2 * (1 - intnsty) * 255);
+          } else {
+              r = 255;
+              g = Math.round(2 * intnsty * 255);
+          }
+
+      } else { //lessisgood
+          if (intnsty > 0.5) {
+              r = 255;
+              g = Math.round(2 * (1 - intnsty) * 255);
+          } else {
+              g = 255;
+              r = Math.round(2 * intnsty * 255);
+          }
+      }
+      return "rgb(" + r.toString() + ", " + g.toString() + ", 0)";
+  }
+
+  function costFormatter(cellvalue, options, rowObject){
+    var maxval = maxCost;
+    var minval = minCost;
+
+    var styl = rgbify(maxval, minval, parseFloat(cellvalue)*10, false);
+
+    var html = "<div class='status_div' style='color:"+styl+"'>";
+    html += "<i class='fa fa-gbp'></i> "+cellvalue;
+    html += "</div>"
+    return html;
+  }
+
+  function TSFormatter(cellvalue, options, rowObject){
+    var maxval = maxTS;
+    var minval = minTS;
+
+    var styl = rgbify(maxval, minval, cellvalue, true);
+
+    var html = "<div class='status_div' style='color:"+styl+"'>";
+    html += cellvalue;
+    html += "</div>"
+    return html;
+  }
+
 });
+
   </script>
 <% end %>
