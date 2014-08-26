@@ -15,16 +15,12 @@ class PlayersController < ApplicationController
                           "MIN(form) as min_form," \
                           "MAX(ea_index) as max_ea_index," \
                           "MIN(ea_index) as min_ea_index," \
-                          "MAX(form) as max_form," \
-                          "MIN(form) as min_form," \
-                          "MAX(form) as max_form," \
-                          "MIN(form) as min_form," \
-                          "MAX(form) as max_form," \
-                          "MIN(form) as min_form," \
-                          "MAX(form) as max_form," \
-                          "MIN(form) as min_form," \
-                          "MAX(form) as max_form," \
-                          "MIN(form) as min_form"
+                          "MAX(bps) as max_bps," \
+                          "MIN(bps) as min_bps," \
+                          "MAX(bonus) as max_bonus," \
+                          "MIN(bonus) as min_bonus," \
+                          "MAX(selected_by_percent) as max_selected_by_percent," \
+                          "MIN(selected_by_percent) as min_selected_by_percent"
                           )[0]
 
     jsondata = {}
