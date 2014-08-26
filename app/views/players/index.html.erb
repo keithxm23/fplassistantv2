@@ -560,12 +560,15 @@
       $("#filterGrid").jqGrid({
           url: "/players.json",
           datatype: "json",
-          colNames: ["Name", "First Name", "Last Name", "Position", "Position_unformatted",
-           "Team", "Team_unformatted", "Status", "Status_unformatted",
-           "News", "&pound;", "cost_unformatted", "F", "TS", "TS_unformatted",
-           "PPG", "TSB", "NF", "NF_unformatted", "MP",
-           "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S", "B", "ESP",
-           "BPS", "Next 3 Fixtures", "Next 3 Fixtures_unformatted"
+          colNames: ["Name", "First Name", "Last Name", "Position",
+           "Position_unformatted", "Team", "Team_unformatted", "Status",
+           "Status_unformatted",
+           "News", "&pound;", "cost_unformatted", "TS",
+           "TS_unformatted", "F", "form_unformatted",
+           "PPG", "TSB", "NF", "NF_unformatted", "MP", "MP_unformatted",
+           "B", "B_unformatted","ESP", "ESP_unformatted", "BPS", "BPS_unformatted",
+           "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S",
+           "Next 3 Fixtures", "Next 3 Fixtures_unformatted"
           ],
           colModel: [
             { name: "web_name", width: 100},
@@ -600,9 +603,14 @@
             { name: "now_cost_float", template: numberTemplate, formatter:costFormatter },
             { name: "now_cost_float_unformatted", template: numberTemplate, jsonmap: "now_cost_float", hidden:true, hidedlg: true },
 
-            { name: "form", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
             { name: "total_points", template: IntTemplate, formatter: TSFormatter },
             { name: "total_points_unformatted", template: IntTemplate, jsonmap: "total_points", hidden:true, hidedlg: true },
+
+            { name: "form", template: numberTemplate,
+                    'editrules': {edithidden: true}, formatter: formFormatter},
+            { name: "form_unformatted", template: numberTemplate, hidden: true,
+                    'editrules': {edithidden: true}, formatter: formFormatter,
+                    jsonmap: "form", hidden:true, hidedlg: true},
 
             { name: "points_per_game", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
             { name: "selected_by", template: numberTemplate, hidden:true},
@@ -610,9 +618,24 @@
             { name: "next_fixture", width:50, align:'center', formatter: nextFixtureFormatter, hidden:true },
             { name: "next_fixture_unformatted", jsonmap: "next_fixture", hidden:true, hidedlg: true},
 
-            { name: "minutes", template: IntTemplate },
-            { name: "goals_scored", template: IntTemplate },
-            { name: "assists", template: IntTemplate },
+            { name: "minutes", template: IntTemplate, formatter:minsFormatter },
+            { name: "minutes_unformatted", template: IntTemplate,
+                    jsonmap: "minutes", hidden:true, hidedlg: true},
+
+            { name: "bonus", template: IntTemplate, formatter:bonusFormatter },
+            { name: "bonus", template: IntTemplate,
+                    jsonmap: "bonus", hidden:true, hidedlg: true},
+
+            { name: "ea_index", template: IntTemplate, formatter: EAIndexFormatter},
+            { name: "ea_index_unformatted", template: IntTemplate,
+                    jsonmap: "ea_index", hidden:true, hidedlg: true},
+
+            { name: "bps", template: IntTemplate, formatter: BPSFormatter},
+            { name: "bps_unformatted", template: IntTemplate,
+                    jsonmap: "bps", hidden:true, hidedlg: true},
+
+            { name: "goals_scored", template: IntTemplate, hidden:true },
+            { name: "assists", template: IntTemplate, hidden: true },
             { name: "clean_sheets", template: IntTemplate, hidden:true },
             { name: "goals_conceded", template: IntTemplate, hidden:true },
             { name: "own_goals", template: IntTemplate, hidden:true },
@@ -621,9 +644,6 @@
             { name: "yellow_cards", template: IntTemplate, hidden:true },
             { name: "red_cards", template: IntTemplate, hidden:true },
             { name: "saves", template: IntTemplate, hidden:true },
-            { name: "bonus", template: IntTemplate },
-            { name: "ea_index", template: IntTemplate, hidden:true },
-            { name: "bps", template: IntTemplate, hidden:true },
 
             { name: "summary", align:'center', width:150, formatter:summaryFormatter, search:false},
             { name: "summary_unformatted", jsonmap: "summary", hidden:true, hidedlg: true}
@@ -987,6 +1007,78 @@
   function TSFormatter(cellvalue, options, rowObject){
     var maxval = maxTS;
     var minval = minTS;
+
+    var styl = rgbify(maxval, minval, cellvalue, true);
+
+    var html = "<div class='status_div' style='color:"+styl+"'>";
+    html += cellvalue;
+    html += "</div>"
+    return html;
+  }
+
+  function minsFormatter(cellvalue, options, rowObject){
+    var maxval = maxMins;
+    var minval = minMins;
+
+    var styl = rgbify(maxval, minval, cellvalue, true);
+
+    var html = "<div class='status_div' style='color:"+styl+"'>";
+    html += cellvalue;
+    html += "</div>"
+    return html;
+  }
+
+  function formFormatter(cellvalue, options, rowObject){
+    var maxval = maxForm;
+    var minval = minForm;
+
+    var styl = rgbify(maxval, minval, cellvalue, true);
+
+    var html = "<div class='status_div' style='color:"+styl+"'>";
+    html += cellvalue;
+    html += "</div>"
+    return html;
+  }
+
+  function EAIndexFormatter(cellvalue, options, rowObject){
+    var maxval = maxEAIndex;
+    var minval = minEAIndex;
+
+    var styl = rgbify(maxval, minval, cellvalue, true);
+
+    var html = "<div class='status_div' style='color:"+styl+"'>";
+    html += cellvalue;
+    html += "</div>"
+    return html;
+  }
+
+  function BPSFormatter(cellvalue, options, rowObject){
+    var maxval = maxBPS;
+    var minval = minBPS;
+
+    var styl = rgbify(maxval, minval, cellvalue, true);
+
+    var html = "<div class='status_div' style='color:"+styl+"'>";
+    html += cellvalue;
+    html += "</div>"
+    return html;
+  }
+
+  function bonusFormatter(cellvalue, options, rowObject){
+    var maxval = maxBonus;
+    var minval = minBonus;
+
+    var styl = rgbify(maxval, minval, cellvalue, true);
+
+    var html = "<div class='status_div' style='color:"+styl+"'>";
+    html += cellvalue;
+    html += "</div>"
+    return html;
+  }
+
+  function SBPFormatter(cellvalue, options, rowObject){
+    var maxval = maxSBP;
+    var minval = minSBP;
 
     var styl = rgbify(maxval, minval, cellvalue, true);
 
