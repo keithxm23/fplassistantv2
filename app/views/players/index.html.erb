@@ -712,6 +712,14 @@
                       $this.jqGrid('setSelection', rowid, false);
                   }
               }
+
+
+              //prepopulate the shortlist with top3 players
+              for(var i=0;i<3;i++){
+                $("#filterGrid").setSelection($("#filterGrid").getDataIDs()[i]);
+              }
+              $("#getSelected").click();
+
           },
           caption: ""
       });
