@@ -29,6 +29,7 @@
           <div id="pager"></div>
         </div>
         <button id="getSelected" type="button" class="btn btn-primary">Shortlist Selected Players</button>
+        <button id="clearShortlist" type="button" class="btn btn-primary">Clear Shortlist</button>
       </div>
     </div>
   </div>
@@ -918,6 +919,14 @@
       }
   });
 
+  //On button-click clear all selection from filterGrid and empty shortlist-Grid
+  $("#clearShortlist").click(function(){
+    $("#filterGrid").jqGrid('resetSelection');
+    idsOfSelectedRows = [];
+    $("#getSelected").click();
+  });
+
+  //On button-click move selected rows from filterGrid to shortlist-Grid
   $("#getSelected").click(function(){
       var shortlisted = [];
       //pull data from filterGrid
