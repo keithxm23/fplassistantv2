@@ -56,6 +56,34 @@
 </div>
 
 <div class="row">
+  <div class="col-lg-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Performance Comparison</h3>
+      </div>
+      <div class="panel-body">
+
+        <div id="container" style="min-width: 400px; max-width: 600px; height: 400px; margin: 0 auto"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> GK Stats</h3>
+      </div>
+      <div class="panel-body">
+
+        TODO
+
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="row">
 
   <div class="col-lg-6">
     <div class="panel panel-primary">
@@ -761,9 +789,8 @@
       $("#shortlistGrid").jqGrid({
           datatype: "local",
           colNames: ["Name", "First Name", "Last Name", "Position", "Team", "Status",
-           "News", "&pound;", "F", "TS", "PPG", "TSB", "NF", "MP",
-           "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S", "B", "ESP",
-           "BPS","Next 3 Fixtures"
+           "News", "&pound;", "F", "TS", "PPG", "TSB", "NF", "MP","B", "ESP","BPS",
+           "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S","Next 3 Fixtures"
           ],
           colModel: [
             { name: "web_name", width: 100},
@@ -788,15 +815,20 @@
                     }
             },
             { name: "news", hidden: true},
-            { name: "now_cost_float_unformatted", template: numberTemplate },
-            { name: "form", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
-            { name: "total_points", template: IntTemplate },
+            { name: "now_cost_float_unformatted", template: numberTemplate,
+              formatter:costFormatter},
+            { name: "form", template: numberTemplate, 'editrules': {edithidden: true}},
+            { name: "total_points", template: IntTemplate,
+              formatter:TSFormatter},
             { name: "points_per_game", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
             { name: "selected_by", template: numberTemplate, hidden:true},
             { name: "next_fixture_unformatted", width:50, align:'center', formatter: nextFixtureFormatter, hidden:true },
-            { name: "minutes", template: IntTemplate },
-            { name: "goals_scored", template: IntTemplate },
-            { name: "assists", template: IntTemplate },
+            { name: "minutes", template: IntTemplate, formatter:minsFormatter  },
+            { name: "bonus", template: IntTemplate, formatter:bonusFormatter  },
+            { name: "ea_index", template: IntTemplate, formatter:EAIndexFormatter },
+            { name: "bps", template: IntTemplate, formatter:BPSFormatter },
+            { name: "goals_scored", template: IntTemplate, hidden:true },
+            { name: "assists", template: IntTemplate, hidden:true },
             { name: "clean_sheets", template: IntTemplate, hidden:true },
             { name: "goals_conceded", template: IntTemplate, hidden:true },
             { name: "own_goals", template: IntTemplate, hidden:true },
@@ -805,9 +837,6 @@
             { name: "yellow_cards", template: IntTemplate, hidden:true },
             { name: "red_cards", template: IntTemplate, hidden:true },
             { name: "saves", template: IntTemplate, hidden:true },
-            { name: "bonus", template: IntTemplate },
-            { name: "ea_index", template: IntTemplate, hidden:true },
-            { name: "bps", template: IntTemplate, hidden:true },
             { name: "summary_unformatted", align:'center', width:150, formatter:summaryFormatter, search:false}
           ],
           toppager:true,
@@ -891,11 +920,77 @@
       //clear data in shortlist
       $('#shortlistGrid').jqGrid('clearGridData');
 
-      //push data to shortlist grid
-      for(var i=0; i<=shortlisted.length; i++){
+
+      var hcData = [];
+      //push data to shortlist-grid
+      for(var i=0; i<shortlisted.length; i++){
         $("#shortlistGrid").jqGrid('addRowData',i+1,shortlisted[i]);
+
+
+        var hdat = [];
+        var hdat = [shortlisted[i].total_points*100/maxTS, //Points
+                    shortlisted[i].form*100/maxForm, //Form
+                    shortlisted[i].minutes*100/maxMins, //Minutes Played
+                    shortlisted[i].bonus*100/maxBonus, //Bonus Points Scored
+                    shortlisted[i].ea_index*100/maxEAIndex, //EA Sports PPI
+                    shortlisted[i].bps*100/maxBPS  //Bonus Points System
+                    ];
+
+        hcData.push({name: shortlisted[i].web_name,
+                      data: hdat,
+                      pointPlacement: 'on'
+                    })
       }
 
+
+      //TODO: Refactor. put in function and supply data as arg
+      $(function () {
+
+        $('#container').highcharts({
+
+            chart: {
+                polar: true,
+                type: 'line'
+            },
+
+            title: {
+                text: 'Comparison with maximum values',
+                x: -80
+            },
+
+            pane: {
+                size: '80%'
+            },
+
+            xAxis: {
+                categories: ['Points', 'Form', 'Minutes Played', 'Bonus Points Scored',
+                        'EA Sports PPI', 'Bonus Points System'],
+                tickmarkPlacement: 'on',
+                lineWidth: 0
+            },
+
+            yAxis: {
+                gridLineInterpolation: 'polygon',
+                lineWidth: 0,
+                min: 0
+            },
+
+            tooltip: {
+                shared: true,
+                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
+            },
+
+            legend: {
+                align: 'right',
+                verticalAlign: 'top',
+                y: 70,
+                layout: 'vertical'
+            },
+
+            series: hcData
+
+        });
+      });
     }
   );
 
@@ -1090,5 +1185,270 @@
 
 });
 
+  </script>
+
+
+  <script>
+  $(function () {
+
+    $('#container').highcharts({
+
+        chart: {
+            polar: true,
+            type: 'line'
+        },
+
+        title: {
+            text: 'Comparison with maximum values',
+            x: -80
+        },
+
+        pane: {
+            size: '80%'
+        },
+
+        xAxis: {
+            categories: ['Points', 'Form', 'Minutes Played', 'Bonus Points Scored',
+                    'EA Sports PPI', 'Bonus Points System'],
+            tickmarkPlacement: 'on',
+            lineWidth: 0
+        },
+
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0
+        },
+
+        tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
+        },
+
+        legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            y: 70,
+            layout: 'vertical'
+        },
+
+        series: []
+
+    });
+  });
+
+    /**
+   * Dark theme for Highcharts JS
+   * @author Torstein Honsi
+   */
+
+  // Load the fonts
+  Highcharts.createElement('link', {
+     href: 'http://fonts.googleapis.com/css?family=Unica+One',
+     rel: 'stylesheet',
+     type: 'text/css'
+  }, null, document.getElementsByTagName('head')[0]);
+
+  Highcharts.theme = {
+     colors: ["#2b908f", "#90ee7e", "#f45b5b", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
+        "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
+     chart: {
+        backgroundColor: {
+           linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
+           stops: [
+              [0, '#2a2a2b'],
+              [1, '#3e3e40']
+           ]
+        },
+        style: {
+           fontFamily: "'Unica One', sans-serif"
+        },
+        plotBorderColor: '#606063'
+     },
+     title: {
+        style: {
+           color: '#E0E0E3',
+           textTransform: 'uppercase',
+           fontSize: '20px'
+        }
+     },
+     subtitle: {
+        style: {
+           color: '#E0E0E3',
+           textTransform: 'uppercase'
+        }
+     },
+     xAxis: {
+        gridLineColor: '#707073',
+        labels: {
+           style: {
+              color: '#E0E0E3'
+           }
+        },
+        lineColor: '#707073',
+        minorGridLineColor: '#505053',
+        tickColor: '#707073',
+        title: {
+           style: {
+              color: '#A0A0A3'
+
+           }
+        }
+     },
+     yAxis: {
+        gridLineColor: '#707073',
+        labels: {
+           style: {
+              color: '#E0E0E3'
+           }
+        },
+        lineColor: '#707073',
+        minorGridLineColor: '#505053',
+        tickColor: '#707073',
+        tickWidth: 1,
+        title: {
+           style: {
+              color: '#A0A0A3'
+           }
+        }
+     },
+     tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        style: {
+           color: '#F0F0F0'
+        }
+     },
+     plotOptions: {
+        series: {
+           dataLabels: {
+              color: '#B0B0B3'
+           },
+           marker: {
+              lineColor: '#333'
+           }
+        },
+        boxplot: {
+           fillColor: '#505053'
+        },
+        candlestick: {
+           lineColor: 'white'
+        },
+        errorbar: {
+           color: 'white'
+        }
+     },
+     legend: {
+        itemStyle: {
+           color: '#E0E0E3'
+        },
+        itemHoverStyle: {
+           color: '#FFF'
+        },
+        itemHiddenStyle: {
+           color: '#606063'
+        }
+     },
+     credits: {
+        style: {
+           color: '#666'
+        }
+     },
+     labels: {
+        style: {
+           color: '#707073'
+        }
+     },
+
+     drilldown: {
+        activeAxisLabelStyle: {
+           color: '#F0F0F3'
+        },
+        activeDataLabelStyle: {
+           color: '#F0F0F3'
+        }
+     },
+
+     navigation: {
+        buttonOptions: {
+           symbolStroke: '#DDDDDD',
+           theme: {
+              fill: '#505053'
+           }
+        }
+     },
+
+     // scroll charts
+     rangeSelector: {
+        buttonTheme: {
+           fill: '#505053',
+           stroke: '#000000',
+           style: {
+              color: '#CCC'
+           },
+           states: {
+              hover: {
+                 fill: '#707073',
+                 stroke: '#000000',
+                 style: {
+                    color: 'white'
+                 }
+              },
+              select: {
+                 fill: '#000003',
+                 stroke: '#000000',
+                 style: {
+                    color: 'white'
+                 }
+              }
+           }
+        },
+        inputBoxBorderColor: '#505053',
+        inputStyle: {
+           backgroundColor: '#333',
+           color: 'silver'
+        },
+        labelStyle: {
+           color: 'silver'
+        }
+     },
+
+     navigator: {
+        handles: {
+           backgroundColor: '#666',
+           borderColor: '#AAA'
+        },
+        outlineColor: '#CCC',
+        maskFill: 'rgba(255,255,255,0.1)',
+        series: {
+           color: '#7798BF',
+           lineColor: '#A6C7ED'
+        },
+        xAxis: {
+           gridLineColor: '#505053'
+        }
+     },
+
+     scrollbar: {
+        barBackgroundColor: '#808083',
+        barBorderColor: '#808083',
+        buttonArrowColor: '#CCC',
+        buttonBackgroundColor: '#606063',
+        buttonBorderColor: '#606063',
+        rifleColor: '#FFF',
+        trackBackgroundColor: '#404043',
+        trackBorderColor: '#404043'
+     },
+
+     // special colors for some of the
+     legendBackgroundColor: 'rgba(0, 0, 0, 0.5)',
+     background2: '#505053',
+     dataLabelsColor: '#B0B0B3',
+     textColor: '#C0C0C0',
+     contrastTextColor: '#F0F0F3',
+     maskColor: 'rgba(255,255,255,0.3)'
+  };
+
+  // Apply the theme
+  Highcharts.setOptions(Highcharts.theme);
   </script>
 <% end %>

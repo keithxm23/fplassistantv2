@@ -20,3 +20,5 @@
 //= require jquery.multiselect.filter
 //= require i18n/grid.locale-en.js
 //= require jquery.jqGrid.min
+//= require highcharts
+//= require highcharts-more
