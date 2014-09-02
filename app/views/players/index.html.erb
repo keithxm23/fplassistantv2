@@ -29,7 +29,6 @@
           <div id="pager"></div>
         </div>
         <button id="getSelected" type="button" class="btn btn-primary">Shortlist Selected Players</button>
-        <button id="clearShortlist" type="button" class="btn btn-primary">Clear Shortlist</button>
       </div>
     </div>
   </div>
@@ -51,6 +50,9 @@
           </table>
           <div id="shortlistGrid_pager"></div>
         </div>
+
+        <button id="clearShortlist" type="button" class="btn btn-primary">Clear Shortlist</button>
+
       </div>
     </div>
   </div>
@@ -122,7 +124,137 @@
       </div>
       <div class="panel-body">
 
-        TODO
+        <table style="width:100%; " class="easy-table easy-table-default table table-bordered">
+          <thead>
+          <tr><th>Team</th>
+          <th>Penalties</th>
+          <th>Direct and Indirect Free Kicks</th>
+          <th>Corners</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr><td class="ARS"><strong>Arsenal</strong></td>
+          <td>Arteta, Giroud, Ozil</td>
+          <td>Walcott, Cazorla, Sanchez</td>
+          <td>Ozil, Cazorla, Walcott</td>
+          </tr>
+
+          <tr><td class="AVL"><strong>Aston Villa</strong></td>
+          <td>Benteke, Bacuna, Bent</td>
+          <td>Benteke, Bacuna, Westwood</td>
+          <td>Westwood, Bacuna, El Ahmadi</td>
+          </tr>
+
+          <tr><td class="BUR"><strong>Burnley</strong></td>
+          <td>Vokes, Ings</td>
+          <td>Trippier, Wallace, Taylor</td>
+          <td>Trippier, Jones, Wallace</td>
+          </tr>
+
+          <tr><td class="CHE"><strong>Chelsea</strong></td>
+          <td>Hazard, Costa, Fabregas</td>
+          <td>Hazard, Oscar, Willian</td>
+          <td>Hazard, Fabregas, Oscar</td>
+          </tr>
+
+          <tr><td class="CRY"><strong>Crystal Palace</strong></td>
+          <td>Murray, Jedinak, Puncheon</td>
+          <td>Jedinak, Bolasie, Gayle</td>
+          <td>Bannan, Puncheon, Bolasie</td>
+          </tr>
+
+          <tr><td class="EVE"><strong>Everton</strong></td>
+          <td>Baines, Lukaku</td>
+          <td>Baines, Barkley, Mirallas</td>
+          <td>Mirallas, Baines, McGeady</td>
+          </tr>
+
+          <tr><td class="EVE"><strong>Hull City</strong></td>
+          <td>Jelavic, Long, Brady</td>
+          <td>Brady, Huddlestone, Snodgrass</td>
+          <td>Huddlestone, Snodgrass, Brady</td>
+          </tr>
+
+          <tr><td class="LEI"><strong>Leicester</strong></td>
+          <td>Nugent, Konchesky</td>
+          <td>Knockaert, Drinkwater</td>
+          <td>Knockaert, Drinkwater, Albrighton</td>
+          </tr>
+
+          <tr><td class="LIV"><strong>Liverpool </strong></td>
+          <td>Gerrard, Lambert, Sturridge</td>
+          <td>Gerrard, Lambert, Coutinho</td>
+          <td>Gerrard, Coutinho, Lallana</td>
+          </tr>
+
+          <tr><td class="MCI"><strong>Man City</strong></td>
+          <td>Aguero, Yaya Toure, Kolarov</td>
+          <td>Yaya Toure, Kolarov, Silva, Nasri</td>
+          <td>Silva, Nasri, Navas</td>
+          </tr>
+
+          <tr><td class="MUN"><strong>Man Utd</strong></td>
+          <td>Van Persie, Rooney</td>
+          <td>Van Persie, Rooney, Mata</td>
+          <td>Van Persie, Rooney, Mata</td>
+          </tr>
+
+          <tr><td class="NEW"><strong>Newcastle </strong></td>
+          <td>Ben Arfa, Cabella, De Jong</td>
+          <td>Ben Arfa, De Jong, Gouffran</td>
+          <td>Ben Arfa, Cabella, Santon</td>
+          </tr>
+
+          <tr><td class="QPR"><strong>QPR</strong></td>
+          <td>Austin, Barton, Remy</td>
+          <td>Barton</td>
+          <td>Barton</td>
+          </tr>
+
+          <tr><td class="SOU"><strong>Southampton</strong></td>
+          <td>Tadic, Davis, Pelle</td>
+          <td>Tadic, Ramirez, Davis</td>
+          <td>Tadic, Ward-Prowse, Davis</td>
+          </tr>
+
+          <tr><td class="STK"><strong>Stoke City</strong></td>
+          <td>Adam, Walters, Arnautovic</td>
+          <td>Adam, Arnautovic, Ireland</td>
+          <td>Adam, Ireland, Assaidi</td>
+          </tr>
+
+          <tr><td class="SUN"><strong>Sunderland</strong></td>
+          <td>Gomez, Fletcher</td>
+          <td>Larsson, Johnson, Gomez</td>
+          <td>Larsson, Johnson, Gomez</td>
+          </tr>
+
+          <tr><td class="SWA"><strong>Swansea</strong></td>
+          <td>Bony</td>
+          <td>Sigurdsson, Shelvey</td>
+          <td>Sigurdsson, Shelvey</td>
+          </tr>
+
+          <tr><td class="TOT"><strong>Tottenham</strong></td>
+          <td>Soldado, Adebayor</td>
+          <td>Eriksen, Walker, Vertonghen</td>
+          <td>Eriksen, Holtby, Lamela</td>
+          </tr>
+
+          <tr><td class="WBA"><strong>West Brom</strong></td>
+          <td>Morrison, Brunt, Dorrans</td>
+          <td>Brunt, Dorrans, Morrison</td>
+          <td>Brunt, Dorrans, Morrison</td>
+          </tr>
+
+          <tr><td class="WHU"><strong>West Ham</strong></td>
+          <td>Noble, Nolan, Carroll</td>
+          <td>Jarvis, Noble, Downing</td>
+          <td>Jarvis, Noble, Downing</td>
+          </tr>
+          </tbody>
+        </table>
+        Date from: http://www.fantasyfootball247.co.uk/fantasy-premier-league-set-piece-takers-2014-15/
 
       </div>
     </div>
