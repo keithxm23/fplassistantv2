@@ -57,27 +57,40 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-6">
+  <div class="col-lg-4">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Performance Comparison</h3>
+        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Performance Stats</h3>
       </div>
       <div class="panel-body">
 
-        <div id="container" style="min-width: 400px; max-width: 600px; height: 400px; margin: 0 auto"></div>
+        <div id="container" style="min-width: 290px; max-width: 600px; height: 400px; margin: 0 auto"></div>
 
       </div>
     </div>
   </div>
 
-  <div class="col-lg-6">
+  <div class="col-lg-4">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> GK Stats</h3>
+        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Positive Stats</h3>
       </div>
       <div class="panel-body">
 
-        TODO
+        <div id="positiveChart" style="min-width: 290px; max-width: 600px; height: 400px; margin: 0 auto"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Negative Stats</h3>
+      </div>
+      <div class="panel-body">
+
+        <div id="negativeChart" style="min-width: 290px; max-width: 600px; height: 400px; margin: 0 auto"></div>
 
       </div>
     </div>
@@ -309,7 +322,7 @@
   //Max and min values for column value coloring received from controllers
   var maxCost = <%= @vals.max_cost %>;
   var minCost = <%= @vals.min_cost %>;
-  var maxTS = <%= @vals.max_ts %>;
+  var maxTS = <%= @vals.max_ts > 0 ? @vals.max_ts : 1 %>;
   var minTS = <%= @vals.min_ts %>;
   var maxMins = <%= @vals.max_mins %>;
   var minMins = <%= @vals.min_mins %>;
@@ -323,6 +336,30 @@
   var minBonus = <%= @vals.min_bonus %>;
   var maxSBP = <%= @vals.max_selected_by_percent %>;
   var minSBP = <%= @vals.min_selected_by_percent %>;
+
+  var maxPM = <%= @vals.max_penalties_missed %>;
+  var minPM = <%= @vals.min_penalties_missed %>;
+  var maxPS = <%= @vals.max_penalties_saved %>;
+  var minPS = <%= @vals.min_penalties_saved %>;
+  var maxOG = <%= @vals.max_own_goals %>;
+  var minOG = <%= @vals.min_own_goals %>;
+  var maxCS = <%= @vals.max_clean_sheets %>;
+  var minCS = <%= @vals.min_clean_sheets %>;
+  var maxSaves = <%= @vals.max_saves %>;
+  var minSaves = <%= @vals.min_saves %>;
+  var maxGC = <%= @vals.max_goals_conceded %>;
+  var minGC = <%= @vals.min_goals_conceded %>;
+  var maxAssists = <%= @vals.max_assists %>;
+  var minAssists = <%= @vals.min_assists %>;
+  var maxGS = <%= @vals.max_goals_scored %>;
+  var minGS = <%= @vals.min_goals_scored %>;
+  var maxYC = <%= @vals.max_yellow_cards %>;
+  var minYC = <%= @vals.min_yellow_cards %>;
+  var maxRC = <%= @vals.max_red_cards %>;
+  var minRC = <%= @vals.min_red_cards %>;
+  var maxDC = <%= @vals.max_dreamteam_count > 0 ? @vals.max_dreamteam_count : 1%>;
+  var minDC = <%= @vals.min_dreamteam_count %>;
+
 
 
     var short_teamname = {
@@ -597,7 +634,7 @@
            "TS_unformatted", "F", "form_unformatted",
            "PPG", "TSB", "NF", "NF_unformatted", "MP", "MP_unformatted",
            "B", "B_unformatted","ESP", "ESP_unformatted", "BPS", "BPS_unformatted",
-           "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S",
+           "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S", "DC",
            "Next 3 Fixtures", "Next 3 Fixtures_unformatted"
           ],
           colModel: [
@@ -674,6 +711,7 @@
             { name: "yellow_cards", template: IntTemplate, hidden:true },
             { name: "red_cards", template: IntTemplate, hidden:true },
             { name: "saves", template: IntTemplate, hidden:true },
+            { name: "dreamteam_count", template: IntTemplate, hidden:true },
 
             { name: "summary", align:'center', width:150, formatter:summaryFormatter, search:false},
             { name: "summary_unformatted", jsonmap: "summary", hidden:true, hidedlg: true}
@@ -716,7 +754,7 @@
               }
 
 
-              //prepopulate the shortlist with top3 players only the first time
+              //prepopulate the shortlist with top3 players only the first loadComplete
               if (firstLoaded != 1){
                 for(var i=0;i<3;i++){
                   $("#filterGrid").setSelection($("#filterGrid").getDataIDs()[i]);
@@ -803,7 +841,7 @@
           datatype: "local",
           colNames: ["Name", "First Name", "Last Name", "Position", "Team", "Status",
            "News", "&pound;", "F", "TS", "PPG", "TSB", "NF", "MP","B", "ESP","BPS",
-           "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S","Next 3 Fixtures"
+           "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S", "DC", "Next 3 Fixtures"
           ],
           colModel: [
             { name: "web_name", width: 100},
@@ -850,6 +888,7 @@
             { name: "yellow_cards", template: IntTemplate, hidden:true },
             { name: "red_cards", template: IntTemplate, hidden:true },
             { name: "saves", template: IntTemplate, hidden:true },
+            { name: "dreamteam_count", template: IntTemplate, hidden:true },
             { name: "summary_unformatted", align:'center', width:150, formatter:summaryFormatter, search:false}
           ],
           toppager:true,
@@ -943,12 +982,12 @@
 
 
       var hcData = [];
+      var positiveChartData = [];
+      var negativeChartData = [];
       //push data to shortlist-grid
       for(var i=0; i<shortlisted.length; i++){
         $("#shortlistGrid").jqGrid('addRowData',i+1,shortlisted[i]);
 
-
-        var hdat = [];
         var hdat = [shortlisted[i].total_points*100/maxTS, //Points
                     shortlisted[i].form*100/maxForm, //Form
                     shortlisted[i].minutes*100/maxMins, //Minutes Played
@@ -960,7 +999,38 @@
         hcData.push({name: shortlisted[i].web_name,
                       data: hdat,
                       pointPlacement: 'on'
-                    })
+                    });
+
+        var hdat = [shortlisted[i].penalties_saved*100/maxPS, //Penalties Saved
+                    shortlisted[i].clean_sheets*100/maxCS, //Clean Sheets
+                    shortlisted[i].dreamteam_count*100/maxDC,  //Dreamteam Count
+                    shortlisted[i].goals_scored*100/maxGS, //Goals Scored
+                    shortlisted[i].assists*100/maxAssists, //Assists
+                    shortlisted[i].saves*100/maxSaves //Saves
+                    ];
+
+        positiveChartData.push({name: shortlisted[i].web_name,
+                      data: hdat,
+                      pointPlacement: 'on'
+                    });
+
+        console.log(hdat);
+
+        var hdat = [shortlisted[i].now_cost_float*1000/maxCost, //Cost
+                    shortlisted[i].penalties_missed*100/maxPM, //Penalties Missed
+                    shortlisted[i].own_goals*100/maxOG, //Own Goals
+                    shortlisted[i].goals_conceded*100/maxGC, //Goals Conceded
+                    shortlisted[i].yellow_cards*100/maxYC, //Yellows
+                    shortlisted[i].red_cards*100/maxRC  //Reds
+                    ];
+
+        negativeChartData.push({name: shortlisted[i].web_name,
+                      data: hdat,
+                      pointPlacement: 'on'
+                    });
+
+
+
       }
 
 
@@ -975,7 +1045,7 @@
             },
 
             title: {
-                text: 'Comparison with maximum values',
+                text: 'Performance Comparison',
                 x: -80
             },
 
@@ -1012,6 +1082,111 @@
 
         });
       });
+
+
+      //TODO: Refactor. put in function and supply data as arg
+      $(function () {
+
+        $('#negativeChart').highcharts({
+
+            chart: {
+                polar: true,
+                type: 'line'
+            },
+
+            title: {
+                text: 'Lower is better',
+                x: -80
+            },
+
+            pane: {
+                size: '80%'
+            },
+
+            xAxis: {
+                categories: ['Cost', 'Penalties Missed', 'Own Goals',
+                'Goals Conceded', 'Yellow Cards', 'Red Cards'],
+                tickmarkPlacement: 'on',
+                lineWidth: 0
+            },
+
+            yAxis: {
+                gridLineInterpolation: 'polygon',
+                lineWidth: 0,
+                min: 0
+            },
+
+            tooltip: {
+                shared: true,
+                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
+            },
+
+            legend: {
+                align: 'right',
+                verticalAlign: 'top',
+                y: 70,
+                layout: 'vertical'
+            },
+
+            series: negativeChartData
+
+        });
+      });
+
+
+
+
+
+      //TODO: Refactor. put in function and supply data as arg
+      $(function () {
+
+        $('#positiveChart').highcharts({
+
+            chart: {
+                polar: true,
+                type: 'line'
+            },
+
+            title: {
+                text: 'Higher is better',
+                x: -80
+            },
+
+            pane: {
+                size: '80%'
+            },
+
+            xAxis: {
+                categories: ['Penalties Saved', 'Clean Sheets', 'Dreamteam Count',
+                 'Goals Scored', 'Assists', 'Saves'],
+                tickmarkPlacement: 'on',
+                lineWidth: 0
+            },
+
+            yAxis: {
+                gridLineInterpolation: 'polygon',
+                lineWidth: 0,
+                min: 0
+            },
+
+            tooltip: {
+                shared: true,
+                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
+            },
+
+            legend: {
+                align: 'right',
+                verticalAlign: 'top',
+                y: 70,
+                layout: 'vertical'
+            },
+
+            series: positiveChartData
+
+        });
+      });
+
+
     }
   );
 
@@ -1210,6 +1385,15 @@
 
 
   <script>
+    /*
+    *******************************************************************************************
+    *******************************************************************************************
+    *******************************************************************************************
+    ********************************* START CHARTS ********************************************
+    *******************************************************************************************
+    *******************************************************************************************
+    *******************************************************************************************
+    */
   $(function () {
 
     $('#container').highcharts({
