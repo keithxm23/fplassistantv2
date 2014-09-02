@@ -579,6 +579,7 @@
 });
 
   idsOfSelectedRows = [];
+  firstLoaded = 0; //to ensure top3 are selected only on first loadComplete
   $(function () {
       numberSearchOptions = ['eq', 'ne', 'le', 'ge', 'nu', 'nn'],
       numberTemplate = {formatter: 'number', align: 'right', sorttype: 'float', width: 50,
@@ -715,11 +716,14 @@
               }
 
 
-              //prepopulate the shortlist with top3 players
-              for(var i=0;i<3;i++){
-                $("#filterGrid").setSelection($("#filterGrid").getDataIDs()[i]);
+              //prepopulate the shortlist with top3 players only the first time
+              if (firstLoaded != 1){
+                for(var i=0;i<3;i++){
+                  $("#filterGrid").setSelection($("#filterGrid").getDataIDs()[i]);
+                }
+                $("#getSelected").click();
+                firstLoaded = 1;
               }
-              $("#getSelected").click();
 
           },
           caption: ""
