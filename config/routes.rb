@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   get 'help' => 'players#help'
   get 'about' => 'players#about'
   get 'contact' => 'players#contact'
-  get 'changelog' => 'players#changelog'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

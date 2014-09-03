@@ -66,7 +66,4 @@ class PlayersController < ApplicationController
   def contact
   end
 
-  def changelog
-  end
-
 end
