@@ -875,7 +875,7 @@
           },
           loadComplete: function () {
               var p = this.p, data = p.data, item, $this = $(this), index = p._index, rowid, i, selCount;
-              for (i = 0, selCount = idsOfSelectedRows.length; i < selCount; i++) {
+              for (var i = 0, selCount = idsOfSelectedRows.length; i < selCount; i++) {
                   rowid = idsOfSelectedRows[i];
                   item = data[index[rowid]];
                   if ('cb' in item && item.cb) {
