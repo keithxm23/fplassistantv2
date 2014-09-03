@@ -975,15 +975,15 @@
           ],
           colModel: [
             { name: "web_name", width: 100},
-            { name: "type_name_unformatted", width: 50, align: 'center', formatter: playerPositionFormatter,
+            { name: "type_name", width: 50, align: 'center', formatter: playerPositionFormatter,
              stype:'select',
              searchoptions:{sopt:['eq','ne'], value:":All;Goalkeeper:GK;Defender:DEF;Midfielder:MID;Forward:FWD"}
             },
-            { name: "team_name_unformatted", width: 50, align: 'center', formatter: teamNameFormatter,
+            { name: "team_name", width: 50, align: 'center', formatter: teamNameFormatter,
              stype:'select',
              searchoptions:{sopt:['eq','ne'], value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"}
             },
-            { name: "status_unformatted", width: 50, align: 'center', formatter: statusFormatter,
+            { name: "status", width: 50, align: 'center', formatter: statusFormatter,
               stype:'select',
                     searchoptions:{sopt:['eq','ne'], value:":All;a:Avaliable;d:Maybe Injured;i:Injured;n:On Loan;s:Suspended"},
                     cellattr: function (rowId, val, rawObject, cm, rdata) {
@@ -991,7 +991,7 @@
                     }
             },
             { name: "news", hidden: true},
-            { name: "now_cost_float_unformatted", template: numberTemplate,
+            { name: "now_cost_float", template: numberTemplate,
               formatter:costFormatter},
             { name: "form", template: numberTemplate, 'editrules': {edithidden: true},
               formatter: formFormatter},
