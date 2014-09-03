@@ -759,7 +759,7 @@
       $("#filterGrid").jqGrid({
           url: "/players.json",
           datatype: "json",
-          colNames: ["Name", "First Name", "Last Name", "Position",
+          colNames: ["Name", "Position",
            "Position_unformatted", "Team", "Team_unformatted", "Status",
            "Status_unformatted",
            "News", "&pound;", "cost_unformatted", "TS",
@@ -771,9 +771,6 @@
           ],
           colModel: [
             { name: "web_name", width: 100},
-            { name: "first_name", hidden: true, width: 120},
-            { name: "second_name", hidden: true, width: 120 },
-
             { name: "type_name", width: 50, align: 'center', formatter: playerPositionFormatter,
              stype:'select', edittype: 'select',
              searchoptions:{sopt:['eq','ne'], value:":All;Goalkeeper:GK;Defender:DEF;Midfielder:MID;Forward:FWD"},
@@ -799,6 +796,7 @@
             { name: "status_unformatted", jsonmap: "status", hidden:true, hidedlg: true},
 
             { name: "news", hidden: true},
+
             { name: "now_cost_float", template: numberTemplate, formatter: costFormatter },
             { name: "now_cost_float_unformatted", template:numberTemplate, jsonmap: "now_cost_float", hidden:true, hidedlg: true },
 
@@ -971,14 +969,12 @@
 
       $("#shortlistGrid").jqGrid({
           datatype: "local",
-          colNames: ["Name", "First Name", "Last Name", "Position", "Team", "Status",
+          colNames: ["Name", "Position", "Team", "Status",
            "News", "&pound;", "F", "TS", "PPG", "TSB", "NF", "MP","B", "ESP","BPS",
            "GS", "A","CS", "GC", "OG", "PS", "PM", "YC", "RC", "S", "DC", "Next 3 Fixtures"
           ],
           colModel: [
             { name: "web_name", width: 100},
-            { name: "first_name", hidden: true, width: 120},
-            { name: "second_name", hidden: true, width: 120 },
             { name: "type_name_unformatted", width: 50, align: 'center', formatter: playerPositionFormatter,
              stype:'select', edittype: 'select',
              searchoptions:{sopt:['eq','ne'], value:":All;Goalkeeper:GK;Defender:DEF;Midfielder:MID;Forward:FWD"},
@@ -1030,7 +1026,7 @@
           pager: "#shortlistGrid_pager",
           rowNum: 10,
           rowList: [10, 20, 30],
-          sortname: "now_cost_float",
+          sortname: "total_points",
           sortorder: "desc",
           viewrecords: true,
           gridview: true,
