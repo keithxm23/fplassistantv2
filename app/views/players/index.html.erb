@@ -749,9 +749,10 @@
     }
 });
 
-  idsOfSelectedRows = [];
-  firstLoaded = 0; //to ensure top3 are selected only on first loadComplete
+
   $(function () {
+      idsOfSelectedRows = [];
+      firstLoaded = 0; //to ensure top3 are selected only on first loadComplete
       numberSearchOptions = ['eq', 'ne', 'le', 'ge', 'nu', 'nn'],
       numberTemplate = {formatter: 'number', align: 'right', sorttype: 'float', width: 50,
                         searchoptions: { sopt: numberSearchOptions }},
