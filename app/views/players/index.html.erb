@@ -782,9 +782,9 @@
             { name: "type_name_unformatted", jsonmap: "type_name", hidden:true, hidedlg: true},
 
             { name: "team_name", width: 50, align: 'center', formatter: teamNameFormatter,
-             stype:'select', edittype: 'select',
-             searchoptions:{sopt:['eq','ne'], value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"},
-             editoptions:{value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"}
+              stype:'select', edittype: 'select',
+              searchoptions:{sopt:['eq','ne'], value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"},
+              editoptions:{value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"}
             },
             { name: "team_name_unformatted", jsonmap: "team_name", hidden:true, hidedlg: true},
 
@@ -799,14 +799,14 @@
             { name: "status_unformatted", jsonmap: "status", hidden:true, hidedlg: true},
 
             { name: "news", hidden: true},
-            { name: "now_cost_float", template: numberTemplate, formatter:costFormatter },
-            { name: "now_cost_float_unformatted", template: numberTemplate, jsonmap: "now_cost_float", hidden:true, hidedlg: true },
+            { name: "now_cost_float", template: numberTemplate, formatter: costFormatter },
+            { name: "now_cost_float_unformatted", template:numberTemplate, jsonmap: "now_cost_float", hidden:true, hidedlg: true },
 
             { name: "total_points", template: IntTemplate, formatter: TSFormatter },
             { name: "total_points_unformatted", template: IntTemplate, jsonmap: "total_points", hidden:true, hidedlg: true },
 
             { name: "form", template: numberTemplate,
-                    'editrules': {edithidden: true}, formatter: formFormatter},
+                     formatter: formFormatter},
             { name: "form_unformatted", template: numberTemplate, hidden: true,
                     'editrules': {edithidden: true}, formatter: formFormatter,
                     jsonmap: "form", hidden:true, hidedlg: true},
@@ -822,7 +822,7 @@
                     jsonmap: "minutes", hidden:true, hidedlg: true},
 
             { name: "bonus", template: IntTemplate, formatter:bonusFormatter },
-            { name: "bonus", template: IntTemplate,
+            { name: "bonus_unformatted", template: IntTemplate,
                     jsonmap: "bonus", hidden:true, hidedlg: true},
 
             { name: "ea_index", template: IntTemplate, formatter: EAIndexFormatter},
@@ -1000,14 +1000,15 @@
             { name: "news", hidden: true},
             { name: "now_cost_float_unformatted", template: numberTemplate,
               formatter:costFormatter},
-            { name: "form", template: numberTemplate, 'editrules': {edithidden: true}},
+            { name: "form", template: numberTemplate, 'editrules': {edithidden: true},
+              formatter: formFormatter},
             { name: "total_points", template: IntTemplate,
               formatter:TSFormatter},
             { name: "points_per_game", template: numberTemplate, hidden: true, 'editrules': {edithidden: true}},
             { name: "selected_by", template: numberTemplate, hidden:true},
             { name: "next_fixture_unformatted", width:50, align:'center', formatter: nextFixtureFormatter, hidden:true },
             { name: "minutes", template: IntTemplate, formatter:minsFormatter  },
-            { name: "bonus", template: IntTemplate, formatter:bonusFormatter  },
+            { name: "bonus_unformatted", template: IntTemplate, formatter:bonusFormatter  },
             { name: "ea_index", template: IntTemplate, formatter:EAIndexFormatter },
             { name: "bps", template: IntTemplate, formatter:BPSFormatter },
             { name: "goals_scored", template: IntTemplate, hidden:true },
@@ -1146,8 +1147,6 @@
                       pointPlacement: 'on'
                     });
 
-        console.log(hdat);
-
         var hdat = [shortlisted[i].now_cost_float*1000/maxCost, //Cost
                     shortlisted[i].penalties_missed*100/maxPM, //Penalties Missed
                     shortlisted[i].own_goals*100/maxOG, //Own Goals
@@ -1177,7 +1176,7 @@
             },
 
             title: {
-                text: 'Performance Comparison',
+                text: 'Performance Stats',
                 x: -80
             },
 
