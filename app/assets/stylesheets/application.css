@@ -39,3 +39,15 @@
   font-weight: normal;
   font-style: normal;
 }
+
+.alert-info{
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  opacity: 0.8;
+}
+.alert .close {
+  color: #31708f;
+  text-decoration: none;
+  opacity: 0.4;
+}
