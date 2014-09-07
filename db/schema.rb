@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140822170602) do
+ActiveRecord::Schema.define(version: 20140907202858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,26 @@ ActiveRecord::Schema.define(version: 20140822170602) do
     t.integer  "element_type"
     t.integer  "team"
     t.string   "summary"
+  end
+
+  create_table "team_performances", force: true do |t|
+    t.integer "sqwk_club_id"
+    t.float   "def_avg"
+    t.float   "att_avg"
+    t.float   "pos_avg"
+    t.float   "tot_avg"
+  end
+
+  create_table "team_tables", force: true do |t|
+    t.integer  "sqwk_club_id"
+    t.integer  "fpl_team_id"
+    t.string   "sqwk_name"
+    t.string   "sqwk_full_name"
+    t.string   "fpl_acrynm_name"
+    t.string   "fpl_team_name"
+    t.string   "sqwk_club_stats_urls"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end
