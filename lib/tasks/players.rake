@@ -42,6 +42,7 @@ namespace :players do
         all_fixs.each do |fix|
           gw = {}
           gw['at'] = DateTime.strptime(fix[0], "%d %b %H:%M")
+          #TODO if date < aug, set to 2015
           gw['gw_num'] = fix[1].gsub("Gameweek ", "")
           if fix[2].include? "(H)"
             gw['home_team'] = p['team_name']
@@ -57,6 +58,7 @@ namespace :players do
         all_fixs.each do |fix|
           gw = {}
           gw['at'] = DateTime.strptime(fix[0], "%d %b %H:%M")
+          #TODO if date < aug, set to 2015
           gw['gw_num'] = fix[1]
           if fix[2].include? "(H)"
             gw['home_team'] = p['team_name']
