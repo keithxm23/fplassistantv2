@@ -1,3 +1,12 @@
+<p>
+  These values are based on <a target="_blank" href="http://www.squawka.com/football-team-rankings#performance-score#team-stats#english-barclays-premier-league|season-2014/2015#0#90#any#any#season#1#all-matches#total">
+    Squawka's team ratings</a> which look at the teams
+  recent attacking, defending, posession and overall performances.
+</p>
+<p>
+  Higher the rating, the more red the team appears.
+  Lower the rating, the more green the team appears.
+</p>
 <ul class="nav nav-tabs" style="margin-bottom: 15px;">
   <li class="active"><a href="#tot" data-toggle="tab">Overall</a></li>
   <li class=""><a href="#att" data-toggle="tab">Attacking</a></li>
@@ -7,51 +16,15 @@
 
 <div id="fixturesAnalysisTabContent" class="tab-content" style="overflow:scroll">
   <div class="tab-pane fade active in" id="tot">
-    <table style="width:100%; font-size: 11px; text-align:center" class="table-bordered">
-      <thead>
-        <tr>
-          <th>Team</th>
-          <% (1..38).each do |n| %>
-            <th style="text-align:center">GW<%= n %></th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <% @teams.keys.each do |t| %>
-          <tr style="height: 15px;">
-            <td style="padding: 2px;" class="<%= @teams[t].fpl_acrynm_name %>">
-              <div class="next_team <%= @teams[t].fpl_acrynm_name %>">
-                <%= @teams[t].fpl_acrynm_name %>
-              </div>
-            </td>
-            <% @fixtures[@teams[t].fpl_team_name].each do |f| %>
-              <td>
-                <div style="overflow:auto; width:52px">
-                  <div class="next_team"
-                    style="background-color:<%= rgbify(@vals['max_tot'], @vals['min_tot'], @teams[f['vs']].team_performance.tot_avg, false) %>;
-                            color:#10214a;">
-                    <%= @short_name[f['vs']] %>
-                  </div>
-                  <div class="next_at <%= f['at'] %> ">
-                    <%= f['at'] %>
-                  </div>
-                </div>
-
-              </td>
-            <% end %>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-
+    <%= render "overall" %>
   </div>
   <div class="tab-pane fade" id="att">
-    <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+    <%= render "attacking" %>
   </div>
   <div class="tab-pane fade" id="pos">
-    <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+    <%= render "possesion" %>
   </div>
   <div class="tab-pane fade" id="def">
-    <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater.</p>
+    <%= render "defending" %>
   </div>
 </div>

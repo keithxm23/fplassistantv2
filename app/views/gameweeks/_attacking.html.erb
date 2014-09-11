@@ -1,0 +1,49 @@
+<table style="width:100%; font-size: 11px; text-align:center" class="table-bordered">
+  <thead>
+    <tr>
+      <th>Team</th>
+      <% (1..38).each do |n| %>
+        <% if n == @curr_gw %>
+          <th style="background-color:#2a9fd6"><div style="width:5px;"></div></th>
+        <% end %>
+        <th style="text-align:center">GW<%= n %></th>
+      <% end %>
+      <th>Team</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @teams.keys.each do |t| %>
+      <tr style="height: 15px;">
+        <td style="padding: 2px;">
+          <div class="short_team_name <%= @teams[t].fpl_acrynm_name %>"
+            style="width:50px;" >
+            <%= @teams[t].fpl_acrynm_name %>
+          </div>
+        </td>
+        <% @fixtures[@teams[t].fpl_team_name].each_with_index do |f, index| %>
+          <% if index+1 == @curr_gw %>
+            <td style="background-color:#2a9fd6"><div style="width:5px;"></div></td>
+          <% end %>
+          <td>
+            <div style="overflow:auto; width:52px">
+              <div class="next_team"
+                style="background-color:<%= rgbify(@vals['max_att'], @vals['min_att'], @teams[f['vs']].team_performance.att_avg, false) %>;
+                        color:#10214a;">
+                <%= @short_name[f['vs']] %>
+              </div>
+              <div class="next_at <%= f['at'] %> ">
+                <%= f['at'] %>
+              </div>
+            </div>
+          </td>
+        <% end %>
+        <td style="padding: 2px;">
+          <div class="short_team_name <%= @teams[t].fpl_acrynm_name %>"
+               style="width:50px;" >
+            <%= @teams[t].fpl_acrynm_name %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

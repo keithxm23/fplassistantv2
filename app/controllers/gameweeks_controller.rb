@@ -22,11 +22,11 @@ class GameweeksController < ApplicationController
           end
         end
       end
-
-
       @fixtures[tm_name] = fixs
     end
 
+    @curr_gw = Gameweek.where("home_goals is  null").minimum(:gw_num)
+    
     @short_name = {
       "Arsenal"=>"ARS",
       "Crystal Palace"=>"CRY",
