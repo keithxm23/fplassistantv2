@@ -27,7 +27,9 @@
             <% @fixtures[@teams[t].fpl_team_name].each do |f| %>
               <td>
                 <div style="overflow:auto; width:52px">
-                  <div class="next_team %>">
+                  <div class="next_team"
+                    style="background-color:<%= rgbify(@vals['max_tot'], @vals['min_tot'], @teams[f['vs']].team_performance.tot_avg, false) %>;
+                            color:#10214a;">
                     <%= @short_name[f['vs']] %>
                   </div>
                   <div class="next_at <%= f['at'] %> ">
