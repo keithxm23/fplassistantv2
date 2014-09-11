@@ -1410,22 +1410,7 @@
       var tm = fix[0];
       var at = fix[1];
 
-      html += "<div class='next_team '>"+tm+"</div>";
-      html += "<div class='next_at "+at+" '>"+at+"</div>";
-    }
-    html += "</div>"
-    return html;
-  }
-
-  function summaryFormatter(cellvalue, options, rowObject){
-    var fixs = cellvalue.split(', ');
-    var html = "<div style='overflow:auto; width:150px'>";
-    for(i=0; i< fixs.length; i++){
-      var fix = fixs[i].split('-');
-      var tm = fix[0];
-      var at = fix[1];
-
-      html += "<div class='next_team '>"+tm+"</div>";
+      html += "<div class='next_team "+tm+"'>"+tm+"</div>";
       html += "<div class='next_at "+at+" '>"+at+"</div>";
     }
     html += "</div>"
