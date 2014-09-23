@@ -16,7 +16,7 @@
   <div class="col-lg-5">
     <div class="alert alert-dismissable alert-info">
       <button type="button" class="close" data-dismiss="alert">×</button>
-      Data last updated on: Mon Sep 22 09:43:43 EDT 2014
+      Data last updated on: Tue Sep 23 10:27:27 EDT 2014
     </div>
   </div>
 </div>
@@ -149,9 +149,9 @@
   <div class="col-lg-6">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-crosshairs"></i> Set Piece Takers</h3>
+        <h3 class="panel-title"><i class="fa fa-crosshairs"></i> Set Piece Takers <span class="hideunhide"><i class="fa fa-expand"></i></span></h3>
       </div>
-      <div class="panel-body">
+      <div class="panel-body" style="display: none;">
 
         <table style="width:100%; " class="easy-table easy-table-default table table-bordered">
           <thead>
@@ -482,15 +482,31 @@
     }
 
 
-
-
     .ui-jqgrid tr.jqgrow td { height: 10px; padding-top: 0px;}
+    
+    .hideunhide{
+      float:right;
+    }
   </style>
   <link rel="stylesheet" type="text/css" href="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-4.3.1/plugin/ui.multiselect.css" />
 <% end %>
 
 <% content_for :js do %>
   <script type="text/javascript">
+    
+    
+    
+  $(".hideunhide").click(function(){
+    hideunhidebtn = $(this);
+    bod = hideunhidebtn.parent().parent(".panel-heading").next(".panel-body");
+    if (hideunhidebtn.children().attr("class") == "fa fa-expand"){
+      hideunhidebtn.children().attr("class","fa fa-compress");
+      $(bod).show("blind");
+    }else{
+      hideunhidebtn.children().attr("class","fa fa-expand");
+      $(bod).hide("blind");
+    }
+  });
 
 
   $.ajax({
