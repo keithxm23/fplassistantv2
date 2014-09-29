@@ -24,7 +24,7 @@
   <div class="col-lg-12">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-group"></i> All Players</h3>
+        <h3 class="panel-title"><i class="fa fa-group"></i> All Players <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
       </div>
       <div class="panel-body">
 
@@ -46,7 +46,7 @@
   <div class="col-lg-12">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-star"></i> Player Shortlist</h3>
+        <h3 class="panel-title"><i class="fa fa-star"></i> Player Shortlist <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
       </div>
       <div class="panel-body">
 
@@ -70,7 +70,7 @@
   <div class="col-lg-4">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Performance Stats</h3>
+        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Performance Stats <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
       </div>
       <div class="panel-body">
 
@@ -83,7 +83,7 @@
   <div class="col-lg-4">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Positive Stats</h3>
+        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Positive Stats <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
       </div>
       <div class="panel-body">
 
@@ -96,7 +96,7 @@
   <div class="col-lg-4">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Negative Stats</h3>
+        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Negative Stats <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
       </div>
       <div class="panel-body">
 
@@ -114,7 +114,7 @@
   <div class="col-lg-12">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-calendar"></i> Fixtures Analysis</h3>
+        <h3 class="panel-title"><i class="fa fa-calendar"></i> Fixtures Analysis <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
       </div>
       <div class="panel-body">
 
@@ -133,9 +133,9 @@
   <div class="col-lg-6">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-ambulance"></i> Injuries</h3>
+        <h3 class="panel-title"><i class="fa fa-ambulance"></i> Injuries <span class="hideunhide"><i class="fa fa-expand"></i></span></h3>
       </div>
-      <div class="panel-body">
+      <div class="panel-body" style="display: none;">
 
         <div style="width:460; text-align:center; font-family:Verdana; font-size:11px;">
           <iframe src="http://www.physioroom.com/affiliate/common/syndicate_table2.php?w=470" width="460" height="1200" frameborder="0"></iframe>
@@ -291,7 +291,7 @@
   <div class="col-lg-6">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-twitter"></i> Latest Twitter Updates</h3>
+        <h3 class="panel-title"><i class="fa fa-twitter"></i> Latest Twitter Updates <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
       </div>
       <div class="panel-body">
 
@@ -309,7 +309,7 @@
   <div class="col-lg-6">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-trophy"></i> Standings</h3>
+        <h3 class="panel-title"><i class="fa fa-trophy"></i> Standings <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
       </div>
       <div class="panel-body">
         <div style="text-align:center">
@@ -487,6 +487,11 @@
     .hideunhide{
       float:right;
     }
+
+    .panel-heading{
+      cursor:pointer;
+    }
+
   </style>
   <link rel="stylesheet" type="text/css" href="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-4.3.1/plugin/ui.multiselect.css" />
 <% end %>
@@ -496,9 +501,9 @@
 
 
 
-  $(".hideunhide").click(function(){
-    hideunhidebtn = $(this);
-    bod = hideunhidebtn.parent().parent(".panel-heading").next(".panel-body");
+  $(".panel-heading").click(function(){
+    hideunhidebtn = $(this).children(".panel-title").children('.hideunhide');
+    bod = $(this).next(".panel-body");
     if (hideunhidebtn.children().attr("class") == "fa fa-expand"){
       hideunhidebtn.children().attr("class","fa fa-compress");
       $(bod).show("blind");
