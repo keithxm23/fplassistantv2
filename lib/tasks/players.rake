@@ -32,7 +32,7 @@ namespace :players do
     new_hash = Digest::MD5.hexdigest(players.to_s) 
     if last_hash.value = new_hash
       puts "no changes"
-      next
+      #next
     else
       last_hash.value = new_hash
       last_hash.save
