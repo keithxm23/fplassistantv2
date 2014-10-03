@@ -4,12 +4,13 @@ namespace :players do
     
     require 'open-uri'
     require 'json'
+    require 'digest'
 
     BASE_URL = "http://fantasy.premierleague.com/web/api/elements/"
     plyr_count = 1
     players = []
     while true
-      puts plyr_count
+      #puts plyr_count
       begin
         data = JSON.load(open(BASE_URL+plyr_count.to_s))
         players << data
@@ -22,6 +23,17 @@ namespace :players do
     if players.size < 617
       next
     end
+    
+    last_hash = Metadata.where(:key=>'last_hash').first
+    new_hash = Digest::MD5.hexdigest(players.to_s) 
+    if last_hash.value = new_hash
+      puts "no changes"
+      next
+    else
+      last_hash.value = new_hash
+      last_hash.save
+    end
+    
     
     FULL_TEAM_NAMES = {
       "ARS" => "Arsenal",
