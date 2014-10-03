@@ -25,6 +25,10 @@ namespace :players do
     end
     
     last_hash = Metadata.where(:key=>'last_hash').first
+    if last_hash.nil?
+      last_hash = Metadata.create(:key=>'last_hash')
+      last_hash.save
+    end
     new_hash = Digest::MD5.hexdigest(players.to_s) 
     if last_hash.value = new_hash
       puts "no changes"
