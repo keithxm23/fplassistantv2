@@ -20,7 +20,7 @@ namespace :players do
       plyr_count += 1
     end
     
-    if players.size < 617
+    if players.size < 621
       next
     end
     
@@ -94,7 +94,7 @@ namespace :players do
       plyr_count += 1
     end
     
-    if players.size < 617
+    if players.size < 621
       next
     end
     
