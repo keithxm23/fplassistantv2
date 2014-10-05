@@ -1,7 +1,8 @@
-class Player < ActiveRecord::Base
-  self.primary_key = "elementid"
+class Performance < ActiveRecord::Base
+  belongs_to :player, :inverse_of => :performances
+  
   def now_cost_float
-    self.now_cost.to_f / 10
+    self.value.to_f / 10
   end
   
   #http://stackoverflow.com/a/6892207/1415352
@@ -10,7 +11,4 @@ class Player < ActiveRecord::Base
     h[:now_cost_float] = self.now_cost_float
     h
   end
-  
-  has_many :performances, :foreign_key => 'player_id',  :inverse_of => :player
-  
 end

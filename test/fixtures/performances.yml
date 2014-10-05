@@ -1,0 +1,51 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  game_date: 2014-10-03
+  gameweek: 1
+  opp_team_id: 1
+  at_home: false
+  team_goals: 1
+  opp_team_goals: 1
+  minutes: 1
+  goals: 1
+  assists: 1
+  clean_sheets: 1
+  conceded: 1
+  own_goals: 1
+  pens_saved: 1
+  pens_missed: 1
+  yellows: 1
+  reds: 1
+  saves: 1
+  bonus: 1
+  esp: 1
+  bps: 1
+  net_transfers: 1
+  value: 1.5
+  points: 1
+
+two:
+  game_date: 2014-10-03
+  gameweek: 1
+  opp_team_id: 1
+  at_home: false
+  team_goals: 1
+  opp_team_goals: 1
+  minutes: 1
+  goals: 1
+  assists: 1
+  clean_sheets: 1
+  conceded: 1
+  own_goals: 1
+  pens_saved: 1
+  pens_missed: 1
+  yellows: 1
+  reds: 1
+  saves: 1
+  bonus: 1
+  esp: 1
+  bps: 1
+  net_transfers: 1
+  value: 1.5
+  points: 1
