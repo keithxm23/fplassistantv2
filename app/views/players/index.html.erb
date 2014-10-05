@@ -75,39 +75,24 @@
         <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Performance Stats <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
       </div>
       <div class="panel-body">
-
-        <div id="container" style="min-width: 290px; max-width: 600px; height: 400px; margin: 0 auto"></div>
-
+        <%= render "spidercharts" %>
       </div>
     </div>
   </div>
-
-  <div class="col-lg-4">
+  
+  
+   <div class="col-lg-8">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Positive Stats <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
+        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Player History <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
       </div>
       <div class="panel-body">
 
-        <div id="positiveChart" style="min-width: 290px; max-width: 600px; height: 400px; margin: 0 auto"></div>
+        <%= render "histories" %>
 
       </div>
     </div>
   </div>
-
-  <div class="col-lg-4">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Negative Stats <span class="hideunhide"><i class="fa fa-compress"></i></span></h3>
-      </div>
-      <div class="panel-body">
-
-        <div id="negativeChart" style="min-width: 290px; max-width: 600px; height: 400px; margin: 0 auto"></div>
-
-      </div>
-    </div>
-  </div>
-
 </div>
 
 
@@ -501,7 +486,10 @@
 <% content_for :js do %>
   <script type="text/javascript">
 
-
+  //so that highcharts correctly resizes itself to width of tabs
+  $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+    $(window).trigger('resize');
+  });
 
   $(".panel-heading").click(function(){
     hideunhidebtn = $(this).children(".panel-title").children('.hideunhide');
@@ -835,7 +823,7 @@
       $("#filterGrid").jqGrid({
           url: "/players.json",
           datatype: "json",
-          colNames: ["Name", "Position",
+          colNames: ["elementid", "Name", "Position",
            "Position_unformatted", "Team", "Team_unformatted", "Status",
            "Status_unformatted",
            "News", "&pound;", "cost_unformatted", "TS",
@@ -846,6 +834,7 @@
            "Next 3 Fixtures", "Next 3 Fixtures_unformatted"
           ],
           colModel: [
+            { name: "elementid", jsonmap: "elementid", hidden:true, hidedlg: true},
             { name: "web_name", width: 100},
             { name: "type_name", width: 50, align: 'center', formatter: playerPositionFormatter,
              stype:'select',
@@ -1186,7 +1175,7 @@
       //push data to shortlist-grid
       for(var i=0; i<shortlisted.length; i++){
         $("#shortlistGrid").jqGrid('addRowData',i+1,shortlisted[i]);
-
+        
         var hdat = [shortlisted[i].total_points*100/maxTS, //Points
                     shortlisted[i].form*100/maxForm, //Form
                     shortlisted[i].minutes*100/maxMins, //Minutes Played
@@ -1225,165 +1214,217 @@
                       data: hdat,
                       pointPlacement: 'on'
                     });
-
-
-
+        
       }
-
-
-      //TODO: Refactor. put in function and supply data as arg
-      $(function () {
-
-        $('#container').highcharts({
-
-            chart: {
-                polar: true,
-                type: 'line'
-            },
-
-            title: {
-                text: 'Performance Stats',
-                x: -80
-            },
-
-            pane: {
-                size: '80%'
-            },
-
-            xAxis: {
-                categories: ['Points', 'Form', 'Minutes Played', 'Bonus Points Scored',
+    
+    spiderCharts = [];
+    spiderCharts.push({
+      chartID:'#generalChart',
+      title:'General',
+      categories: ['Points', 'Form', 'Minutes Played', 'Bonus Points Scored',
                         'EA Sports PPI', 'Bonus Points System'],
-                tickmarkPlacement: 'on',
-                lineWidth: 0
-            },
-
-            yAxis: {
-                gridLineInterpolation: 'polygon',
-                lineWidth: 0,
-                min: 0
-            },
-
-            tooltip: {
-                shared: true,
-                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
-            },
-
-            legend: {
-                align: 'right',
-                verticalAlign: 'top',
-                y: 70,
-                layout: 'vertical'
-            },
-
-            series: hcData
-
-        });
-      });
-
-
-      //TODO: Refactor. put in function and supply data as arg
-      $(function () {
-
-        $('#negativeChart').highcharts({
-
-            chart: {
-                polar: true,
-                type: 'line'
-            },
-
-            title: {
-                text: 'Lower is better',
-                x: -80
-            },
-
-            pane: {
-                size: '80%'
-            },
-
-            xAxis: {
-                categories: ['Cost', 'Penalties Missed', 'Own Goals',
-                'Goals Conceded', 'Yellow Cards', 'Red Cards'],
-                tickmarkPlacement: 'on',
-                lineWidth: 0
-            },
-
-            yAxis: {
-                gridLineInterpolation: 'polygon',
-                lineWidth: 0,
-                min: 0
-            },
-
-            tooltip: {
-                shared: true,
-                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
-            },
-
-            legend: {
-                align: 'right',
-                verticalAlign: 'top',
-                y: 70,
-                layout: 'vertical'
-            },
-
-            series: negativeChartData
-
-        });
-      });
-
-
-
-
-
-      //TODO: Refactor. put in function and supply data as arg
-      $(function () {
-
-        $('#positiveChart').highcharts({
-
-            chart: {
-                polar: true,
-                type: 'line'
-            },
-
-            title: {
-                text: 'Higher is better',
-                x: -80
-            },
-
-            pane: {
-                size: '80%'
-            },
-
-            xAxis: {
-                categories: ['Penalties Saved', 'Clean Sheets', 'Dreamteam Count',
+      series: hcData
+    });
+    spiderCharts.push({
+      chartID:'#positivesChart',
+      title:'Higher is better',
+      categories: ['Penalties Saved', 'Clean Sheets', 'Dreamteam Count',
                  'Goals Scored', 'Assists', 'Saves'],
+      series: positiveChartData
+    });
+    spiderCharts.push({
+      chartID:'#negativesChart',
+      title:'Lower is better',
+      categories: ['Cost', 'Penalties Missed', 'Own Goals',
+                'Goals Conceded', 'Yellow Cards', 'Red Cards'],
+      series: negativeChartData
+    });
+    
+    spiderCharts.map(function(chartDat) {
+      $(function () {
+        $(chartDat.chartID).highcharts({
+            chart: {
+                polar: true,
+                type: 'line'
+            },
+            title: {
+                text: chartDat.title,
+                x: -80
+            },
+            pane: {
+                size: '80%'
+            },
+            xAxis: {
+                categories: chartDat.categories,
                 tickmarkPlacement: 'on',
                 lineWidth: 0
             },
-
             yAxis: {
                 gridLineInterpolation: 'polygon',
                 lineWidth: 0,
                 min: 0
             },
-
             tooltip: {
                 shared: true,
                 pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
             },
-
             legend: {
                 align: 'right',
                 verticalAlign: 'top',
                 y: 70,
                 layout: 'vertical'
             },
-
-            series: positiveChartData
-
+            series: chartDat.series
         });
+      });    
+    });
+    
+    
+    //plot ajax player history charts
+    histDat = [];
+    for(var i=0; i<shortlisted.length; i++){
+      $.ajax({url: "/playerperformances/"+shortlisted[i].elementid+".json",
+              async: false
+             }).done(function(data){
+        histDat.push({'name':shortlisted[i].web_name,
+                      'data':data});
       });
+    }
+    
+    //console.log(histDat);
 
-
+    
+    histCharts = [];
+    histCharts.push({
+      chartID : "#costHistoryChart",
+      title: 'Player Cost History',
+      yText: 'Cost',
+      series: 'now_cost_float'
+    });
+    histCharts.push({
+      chartID : "#pointsHistoryChart",
+      title: 'Player Points History',
+      yText: 'Points',
+      series: 'points'
+    });
+    histCharts.push({
+      chartID : "#ntHistoryChart",
+      title: 'Player Net Transfers History',
+      yText: 'Net Transfers',
+      series: 'net_transfers'
+    });
+    histCharts.push({
+      chartID : "#bpsHistoryChart",
+      title: 'Player BPS History',
+      yText: 'Bonus Points System',
+      series: 'bps'
+    });
+    histCharts.push({
+      chartID : "#espHistoryChart",
+      title: 'Player ESP History',
+      yText: 'EA Sports PPI',
+      series: 'esp'
+    });
+    histCharts.push({
+      chartID : "#minsHistoryChart",
+      title: 'Player Minutes Played History',
+      yText: 'Minutes Played',
+      series: 'minutes'
+    });
+    
+    
+    
+    histCharts.map(function(chartDat) {
+      $(function () {
+        $(chartDat.chartID).highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: chartDat.title
+            },
+            xAxis: {
+                allowDecimals: false,
+                min: 1,
+                title: {
+                    text: 'Gameweek'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: chartDat.yText
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            
+            
+            series: histDat.map(function(dat) {
+                      tmp = {};
+                      tmp['name'] = dat.name;
+                      tmp['data'] = dat.data.map(function(pdat){
+                        return pdat[chartDat.series];
+                      });
+                      return tmp;
+                    })
+          });
+      });  
+      return true;
+    });
+    
+    
+/*
+    $(function () {
+        $('#costHistoryChart').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Player Cost History'
+            },
+            xAxis: {
+                allowDecimals: false,
+                min: 1,
+                title: {
+                    text: 'Gameweek'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Cost'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            
+            
+            series: histDat.map(function(dat) {
+                      tmp = {};
+                      tmp['name'] = dat.name;
+                      tmp['data'] = dat.data.map(function(pdat){
+                        return pdat.now_cost_float;
+                      });
+                      return tmp;
+                    })
+        });
+    });*/
+    
+    
+    
+    
+    
     }
   );
 

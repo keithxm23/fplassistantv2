@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get 'contact' => 'players#contact'
 
   get 'fixtures' => 'gameweeks#fixtures'
+  get '/playerperformances/:id', to: 'performances#show'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
