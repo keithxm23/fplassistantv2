@@ -98,7 +98,7 @@ namespace :players do
     if players.size < 621
       next
     end
-    
+    begin
     
     FULL_TEAM_NAMES = {
       "ARS" => "Arsenal",
@@ -179,6 +179,9 @@ namespace :players do
       
     end
     puts 'dumped all players and player history'
+  rescue Exception => e
+    puts e.message
+  end
   end
   
   
