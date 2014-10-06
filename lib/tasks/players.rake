@@ -24,19 +24,19 @@ namespace :players do
       next
     end
     
-    last_hash = Metadata.where(:key=>'last_hash').first
-    if last_hash.nil?
-      last_hash = Metadata.create(:key=>'last_hash')
-      last_hash.save
-    end
-    new_hash = Digest::MD5.hexdigest(players.to_s) 
-    if last_hash.value == new_hash
-      puts "no changes"
-      next
-    else
-      last_hash.value = new_hash
-      last_hash.save
-    end
+#     last_hash = Metadata.where(:key=>'last_hash').first
+#     if last_hash.nil?
+#       last_hash = Metadata.create(:key=>'last_hash')
+#       last_hash.save
+#     end
+#     new_hash = Digest::MD5.hexdigest(players.to_s) 
+#     if last_hash.value == new_hash
+#       puts "no changes"
+#       next
+#     else
+#       last_hash.value = new_hash
+#       last_hash.save
+#     end
     
     
     FULL_TEAM_NAMES = {
@@ -95,7 +95,9 @@ namespace :players do
       plyr_count += 1
     end
     
-    
+    if players.size < 621
+      next
+    end
     begin
     
     FULL_TEAM_NAMES = {
