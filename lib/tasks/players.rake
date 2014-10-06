@@ -14,7 +14,7 @@ namespace :players do
       begin
         data = JSON.load(open(BASE_URL+plyr_count.to_s))
         players << data
-      rescue OpenURI::HTTPError => e
+      rescue Exception => e
         break
       end
       plyr_count += 1
@@ -88,7 +88,7 @@ namespace :players do
       begin
         data = JSON.load(open(BASE_URL+plyr_count.to_s))
         players << data
-      rescue OpenURI::HTTPError => e
+      rescue Exception => e
         break
       end
       plyr_count += 1
