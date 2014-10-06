@@ -10,7 +10,7 @@ namespace :players do
     plyr_count = 1
     players = []
     while true
-      #puts plyr_count
+      puts plyr_count
       begin
         data = JSON.load(open(BASE_URL+plyr_count.to_s))
         players << data
@@ -20,24 +20,23 @@ namespace :players do
       plyr_count += 1
     end
     
-    if players.size < 621
+    if players.size < 620
       next
     end
     
-#     last_hash = Metadata.where(:key=>'last_hash').first
-#     if last_hash.nil?
-#       last_hash = Metadata.create(:key=>'last_hash')
-#       last_hash.save
-#     end
-#     new_hash = Digest::MD5.hexdigest(players.to_s) 
-#     if last_hash.value == new_hash
-#       puts "no changes"
-#       next
-#     else
-#       last_hash.value = new_hash
-#       last_hash.save
-#     end
-    
+    last_hash = Metadata.where(:key=>'last_hash').first
+    if last_hash.nil?
+      last_hash = Metadata.create(:key=>'last_hash')
+      last_hash.save
+    end
+    new_hash = Digest::MD5.hexdigest(players.to_s) 
+    if last_hash.value == new_hash
+      puts "no changes"
+      next
+    else
+      last_hash.value = new_hash
+      last_hash.save
+    end
     
     FULL_TEAM_NAMES = {
       "ARS" => "Arsenal",
@@ -95,10 +94,9 @@ namespace :players do
       plyr_count += 1
     end
     
-    if players.size < 621
+    if players.size < 620
       next
     end
-    begin
     
     FULL_TEAM_NAMES = {
       "ARS" => "Arsenal",
@@ -179,9 +177,6 @@ namespace :players do
       
     end
     puts 'dumped all players and player history'
-  rescue Exception => e
-    puts e.message
-  end
   end
   
   
