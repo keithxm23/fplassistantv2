@@ -21,6 +21,7 @@ namespace :gameweeks do
     end
     
     if players.size < 620
+      puts "player size <620"
       next
     end
 
@@ -49,7 +50,6 @@ namespace :gameweeks do
       }
 
     Gameweek.delete_all
-    players = JSON.parse(IO.read('data.json'))
     gw_data = {}
     players.each do |p|
       tmp = p.except('fixtures','event_explain','season_history','fixture_history')
@@ -91,8 +91,8 @@ namespace :gameweeks do
           gw['away_goals'] = fix[2].gsub(/^\D+/, "").split("-")[1]
           Gameweek.create(gw)
         end
-
         gw_data[p['team_name']] = nil
+        
       end
     end
     Gameweek.dedupe
