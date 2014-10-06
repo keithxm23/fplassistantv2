@@ -95,9 +95,7 @@ namespace :players do
       plyr_count += 1
     end
     
-    if players.size < 621
-      next
-    end
+    
     begin
     
     FULL_TEAM_NAMES = {
