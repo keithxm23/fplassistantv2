@@ -89,6 +89,7 @@ namespace :players do
         data = JSON.load(open(BASE_URL+plyr_count.to_s))
         players << data
       rescue Exception => e
+        puts e.message
         break
       end
       plyr_count += 1
