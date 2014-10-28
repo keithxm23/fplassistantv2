@@ -1345,9 +1345,14 @@
             },
             xAxis: {
                 allowDecimals: false,
-                min: 1,
+                min: 0,
                 title: {
                     text: 'Gameweek'
+                },
+                labels: {
+                  formatter: function () {
+                    return this.value + 1;
+                  }             
                 }
             },
             yAxis: {
