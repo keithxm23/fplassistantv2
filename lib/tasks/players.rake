@@ -67,7 +67,7 @@ namespace :players do
       tmp = p.except('fixtures','event_explain','season_history','fixture_history')
       tmp['elementid'] = p['id']
       tmp['summary'] = p['fixtures']['summary'].map{|s| s[1].delete('()').sub(" ", "-")}.join(", ")
-      Player.create(tmp.except('id'))
+      Player.create(tmp.except('id', 'loans_in', 'loans_out', 'loaned_in', 'loaned_out'))
     end
     puts 'dumped all players'
   end
@@ -133,7 +133,7 @@ namespace :players do
       tmp = p.except('fixtures','event_explain','season_history','fixture_history')
       tmp['elementid'] = p['id']
       tmp['summary'] = p['fixtures']['summary'].map{|s| s[1].delete('()').sub(" ", "-")}.join(", ")
-      Player.create(tmp.except('id'))
+      Player.create(tmp.except('id', 'loans_in', 'loans_out', 'loaned_in', 'loaned_out'))
       
       p['fixture_history']['all'].each {|f|
         tmpfix = {}
