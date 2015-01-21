@@ -1290,13 +1290,12 @@
       $.ajax({url: "/playerperformances/"+shortlisted[i].elementid+".json",
               async: false
              }).done(function(data){
-        histDat.push({'name':shortlisted[i].web_name,
-                      'data':data});
+                  histDat.push({'name':shortlisted[i].web_name,
+                                'data':data});
       });
     }
     
     //console.log(histDat);
-
     
     histCharts = [];
     histCharts.push({
@@ -1375,65 +1374,25 @@
             
             
             series: histDat.map(function(dat) {
-                      tmp = {};
-                      tmp['name'] = dat.name;
-                      tmp['data'] = dat.data.map(function(pdat){
-                        return pdat[chartDat.series];
-                      });
-                      return tmp;
-                    })
+              tmp = {};
+              tmp['name'] = dat.name;
+              tmp['data'] = dat.data.map(function(pdat){
+                return pdat[chartDat.series];
+              });
+              
+              //'hack' to fix series for players that joined the league after gw1
+              maxgw = dat['data'][dat['data'].length - 1]['gameweek'];
+              gwdiff = maxgw - tmp['data'].length;
+              for(var i=0; i < gwdiff; i++){
+                tmp['data'].unshift(null);
+              }
+              return tmp;
+            })
           });
       });  
       return true;
     });
-    
-    
-/*
-    $(function () {
-        $('#costHistoryChart').highcharts({
-            chart: {
-                type: 'line'
-            },
-            title: {
-                text: 'Player Cost History'
-            },
-            xAxis: {
-                allowDecimals: false,
-                min: 1,
-                title: {
-                    text: 'Gameweek'
-                }
-            },
-            yAxis: {
-                title: {
-                    text: 'Cost'
-                }
-            },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: true
-                    },
-                    enableMouseTracking: false
-                }
-            },
-            
-            
-            series: histDat.map(function(dat) {
-                      tmp = {};
-                      tmp['name'] = dat.name;
-                      tmp['data'] = dat.data.map(function(pdat){
-                        return pdat.now_cost_float;
-                      });
-                      return tmp;
-                    })
-        });
-    });*/
-    
-    
-    
-    
-    
+        
     }
   );
 
