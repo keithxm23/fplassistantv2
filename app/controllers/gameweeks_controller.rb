@@ -16,9 +16,9 @@ class GameweeksController < ApplicationController
       gw_data.each do |gw|
         if [gw.home_team, gw.away_team].include? tm_name
           if gw.home_team == tm_name
-            fixs << {'vs' => gw.away_team, 'at' => 'H'}
+            fixs << {'vs' => gw.away_team, 'at' => 'H', 'gw' => gw.gw_num}
           else
-            fixs << {'vs' => gw.home_team, 'at' => 'A'}
+            fixs << {'vs' => gw.home_team, 'at' => 'A', 'gw' => gw.gw_num}
           end
         end
       end

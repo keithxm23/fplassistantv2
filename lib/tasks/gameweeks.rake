@@ -60,6 +60,7 @@ namespace :gameweeks do
 
         all_fixs = p['fixtures']['all']
         all_fixs.each do |fix|
+          next if fix[0] == "-"
           gw = {}
           gw['at'] = DateTime.strptime(fix[0], "%d %b %H:%M")
           #TODO if date < aug, set to 2015
