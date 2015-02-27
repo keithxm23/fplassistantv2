@@ -1421,6 +1421,7 @@
 
   function nextFixtureFormatter(cellvalue, options, rowObject){
     var tmp = cellvalue.split(' (');
+    if (tmp[0] == ""){ return "NA";};
     var html = short_teamname[tmp[0]] + "-" + tmp[1][0];
     return html;
   }
