@@ -79,8 +79,8 @@
       </div>
     </div>
   </div>
-  
-  
+
+
    <div class="col-lg-8">
     <div class="panel panel-primary">
       <div class="panel-heading">
@@ -346,7 +346,7 @@
     #gs_type_name {color: #000}
     #gs_team_name {color: #000}
     #gs_status {color: #000}
-    
+
     input{background-color: black;}
     .searchFilter select, input {
       width: auto !important;
@@ -439,10 +439,12 @@
       background-color:#231f20;
       color:#ffffff;
     }
+    /*
     .QPR{
       background-color:#4487c1;
       color:#cecec8;
     }
+    */
     .STK{
       background-color:#ffffff;
       color:#e03a3e;
@@ -463,6 +465,7 @@
       background-color:#fbfdf1;
       color:#091453;
     }
+    /*
     .BUR{
       background-color:#84092e;
       color:#89d1f3;
@@ -470,6 +473,19 @@
     .HUL{
       background-color:#f5a12d;
       color:#000000;
+    }
+    */
+    .WAT{
+      background-color:#F5F502;
+      color:#000000;
+    }
+    .BOU{
+      background-color:#941406;
+      color:#000000;
+    }
+    .NOR{
+      background-color:#F2EC3F;
+      color:#2D9134;
     }
 
 
@@ -572,14 +588,17 @@
       "Liverpool":"LIV",
       "Swansea":"SWA",
       "Newcastle":"NEW",
-      "QPR":"QPR",
+//       "QPR":"QPR",
       "Stoke":"STK",
       "Sunderland":"SUN",
       "West Ham":"WHU",
       "Aston Villa":"AVL",
       "West Brom":"WBA",
-      "Burnley":"BUR",
-      "Hull":"HUL"
+//       "Burnley":"BUR",
+//       "Hull":"HUL",
+      "Bournemouth":"BOU",
+      "Watford":"WAT",
+      "Norwich":"NOR"
     };
 
     var long_teamname = {
@@ -595,14 +614,17 @@
       "LIV" : "Liverpool",
       "SWA" : "Swansea",
       "NEW" : "Newcastle",
-      "QPR" : "QPR",
+//       "QPR" : "QPR",
       "STK" : "Stoke",
       "SUN" : "Sunderland",
       "WHU" : "West Ham",
       "AVL" : "Aston Villa",
       "WBA" : "West Brom",
-      "BUR" : "Burnley",
-      "HUL" : "Hull"
+//       "BUR" : "Burnley",
+//       "HUL" : "Hull",
+      "BOU" : "Bournemouth",
+      "WAT" : "Watford",
+      "NOR" : "Norwich"
       };
 
     var position_short = {"Goalkeeper":"G", "Forward":"F", "Midfielder":"M", "Defender":"D"};
@@ -848,7 +870,7 @@
 
             { name: "team_name", width: 50, align: 'center', formatter: teamNameFormatter,
               stype:'select',
-              searchoptions:{sopt:['eq','ne'], value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"}
+              searchoptions:{sopt:['eq','ne'], value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Bournemouth:Bournemouth;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Norwich:Norwich;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham;Watford:Watford"}
             },
             { name: "team_name_unformatted", jsonmap: "team_name", hidden:true, hidedlg: true},
 
@@ -1047,7 +1069,7 @@
             },
             { name: "team_name", width: 50, align: 'center', formatter: teamNameFormatter,
              stype:'select',
-             searchoptions:{sopt:['eq','ne'], value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;QPR:QPR;Hull:Hull;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Burnley:Burnley;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham"}
+             searchoptions:{sopt:['eq','ne'], value:":All;Arsenal:Arsenal;Aston Villa:Aston Villa;Bournemouth:Bournemouth;Leicester:Leicester;Chelsea:Chelsea;Crystal Palace:Crystal Palace;Everton:Everton;Liverpool:Liverpool;Man City:Man City;Man Utd:Man Utd;Newcastle:Newcastle;Norwich:Norwich;Southampton:Southampton;Stoke:Stoke;Sunderland:Sunderland;Swansea:Swansea;Spurs:Spurs;West Brom:West Brom;West Ham:West Ham;Watford:Watford"}
             },
             { name: "status", width: 50, align: 'center', formatter: statusFormatter,
               stype:'select',
@@ -1179,7 +1201,7 @@
       //push data to shortlist-grid
       for(var i=0; i<shortlisted.length; i++){
         $("#shortlistGrid").jqGrid('addRowData',i+1,shortlisted[i]);
-        
+
         var hdat = [shortlisted[i].total_points*100/maxTS, //Points
                     shortlisted[i].form*100/maxForm, //Form
                     shortlisted[i].minutes*100/maxMins, //Minutes Played
@@ -1218,9 +1240,9 @@
                       data: hdat,
                       pointPlacement: 'on'
                     });
-        
+
       }
-    
+
     spiderCharts = [];
     spiderCharts.push({
       chartID:'#generalChart',
@@ -1243,7 +1265,7 @@
                 'Goals Conceded', 'Yellow Cards', 'Red Cards'],
       series: negativeChartData
     });
-    
+
     spiderCharts.map(function(chartDat) {
       $(function () {
         $(chartDat.chartID).highcharts({
@@ -1280,10 +1302,10 @@
             },
             series: chartDat.series
         });
-      });    
+      });
     });
-    
-    
+
+
     //plot ajax player history charts
     histDat = [];
     for(var i=0; i<shortlisted.length; i++){
@@ -1294,9 +1316,9 @@
                                 'data':data});
       });
     }
-    
+
     //console.log(histDat);
-    
+
     histCharts = [];
     histCharts.push({
       chartID : "#costHistoryChart",
@@ -1334,9 +1356,9 @@
       yText: 'Minutes Played',
       series: 'minutes'
     });
-    
-    
-    
+
+
+
     histCharts.map(function(chartDat) {
       $(function () {
         $(chartDat.chartID).highcharts({
@@ -1355,7 +1377,7 @@
                 labels: {
                   formatter: function () {
                     return this.value + 1;
-                  }             
+                  }
                 }
             },
             yAxis: {
@@ -1371,15 +1393,15 @@
                     enableMouseTracking: false
                 }
             },
-            
-            
+
+
             series: histDat.map(function(dat) {
               tmp = {};
               tmp['name'] = dat.name;
               tmp['data'] = dat.data.map(function(pdat){
                 return pdat[chartDat.series];
               });
-              
+
               //'hack' to fix series for players that joined the league after gw1
               maxgw = dat['data'][dat['data'].length - 1]['gameweek'];
               gwdiff = maxgw - tmp['data'].length;
@@ -1389,10 +1411,10 @@
               return tmp;
             })
           });
-      });  
+      });
       return true;
     });
-        
+
     }
   );
 

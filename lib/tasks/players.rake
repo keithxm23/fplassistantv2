@@ -1,7 +1,7 @@
 namespace :players do
   desc "Populates players data"
   task :populate => :environment do
-    
+
     require 'open-uri'
     require 'json'
     require 'digest'
@@ -19,17 +19,17 @@ namespace :players do
       end
       plyr_count += 1
     end
-    
+
     if players.size < 620
       next
     end
-    
+
     last_hash = Metadata.where(:key=>'last_hash').first
     if last_hash.nil?
       last_hash = Metadata.create(:key=>'last_hash')
       last_hash.save
     end
-    new_hash = Digest::MD5.hexdigest(players.to_s) 
+    new_hash = Digest::MD5.hexdigest(players.to_s)
     if last_hash.value == new_hash
       puts "no changes"
       next
@@ -37,7 +37,7 @@ namespace :players do
       last_hash.value = new_hash
       last_hash.save
     end
-    
+
     FULL_TEAM_NAMES = {
       "ARS" => "Arsenal",
       "CRY" => "Crystal Palace",
@@ -51,14 +51,17 @@ namespace :players do
       "LIV" => "Liverpool",
       "SWA" => "Swansea",
       "NEW" => "Newcastle",
-      "QPR" => "QPR",
+#       "QPR" => "QPR",
       "STK" => "Stoke",
       "SUN" => "Sunderland",
       "WHU" => "West Ham",
       "AVL" => "Aston Villa",
       "WBA" => "West Brom",
-      "BUR" => "Burnley",
-      "HUL" => "Hull"
+#       "BUR" => "Burnley",
+#       "HUL" => "Hull",
+      "WAT" => "Watford",
+      "BOU" => "Bournemouth",
+      "NOR" => "Norwich"
       }
 
     Player.delete_all
@@ -71,10 +74,10 @@ namespace :players do
     end
     puts 'dumped all players'
   end
-  
+
   desc "Populates players and player history data"
   task :populate_with_history => :environment do
-    
+
     require 'open-uri'
     require 'json'
     require 'digest'
@@ -93,11 +96,11 @@ namespace :players do
       end
       plyr_count += 1
     end
-    
+
     if players.size < 620
       next
     end
-    
+
     FULL_TEAM_NAMES = {
       "ARS" => "Arsenal",
       "CRY" => "Crystal Palace",
@@ -111,16 +114,19 @@ namespace :players do
       "LIV" => "Liverpool",
       "SWA" => "Swansea",
       "NEW" => "Newcastle",
-      "QPR" => "QPR",
+#       "QPR" => "QPR",
       "STK" => "Stoke",
       "SUN" => "Sunderland",
       "WHU" => "West Ham",
       "AVL" => "Aston Villa",
       "WBA" => "West Brom",
-      "BUR" => "Burnley",
-      "HUL" => "Hull"
+#       "BUR" => "Burnley",
+#       "HUL" => "Hull",
+      "WAT" => "Watford",
+      "BOU" => "Bournemouth",
+      "NOR" => "Norwich"
       }
-    
+
     TEAM_IDS = {}
     FULL_TEAM_NAMES.keys.each { |t|
       TEAM_IDS[t] = Team.where(:fpl_acrynm_name => t).first.id
@@ -134,7 +140,7 @@ namespace :players do
       tmp['elementid'] = p['id']
       tmp['summary'] = p['fixtures']['summary'].map{|s| s[1].delete('()').sub(" ", "-")}.join(", ")
       Player.create(tmp.except('id', 'loans_in', 'loans_out', 'loaned_in', 'loaned_out'))
-      
+
       p['fixture_history']['all'].each {|f|
         tmpfix = {}
         tmpfix['player_id'] = p['id']
@@ -157,7 +163,7 @@ namespace :players do
         tmpfix['net_transfers'] = f[17]
         tmpfix['value'] = f[18]
         tmpfix['points'] = f[19]
-        
+
         if f[2].include? "(H)"
           tmpfix['at_home'] = true
           tmpfix['opp_team_id'] = TEAM_IDS[f[2].gsub(/\(H\)\s\d+-\d+$/,"")]
@@ -170,15 +176,15 @@ namespace :players do
         tmpfix['team_name'] = p['team_name']
         tmpfix['team_goals'] = f[2].gsub(/^\D+/, "").split("-")[0]
         tmpfix['opp_team_goals'] = f[2].gsub(/^\D+/, "").split("-")[1]
-        
+
         Performance.create(tmpfix)
       }
-      
-      
+
+
     end
     puts 'dumped all players and player history'
   end
-  
-  
-  
+
+
+
 end

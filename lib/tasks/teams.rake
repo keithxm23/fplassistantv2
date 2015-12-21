@@ -6,7 +6,8 @@ namespace :teams do
     require 'open-uri'
     require 'json'
 
-    sqwk_teamdata_url = "http://www.squawka.com/wp-content/themes/squawka_web/leaderboard_process-v2.php?type=Team%20Stats&filter=2&league=126&team=0,31,32,302,33,169,34,170,315,36,37,38,39,41,43,44,45,46,47,48,49&played=All%20matches&seasonstart=&seasonend=&by=season&timestart=0&timeend=90&showtype=desc"
+    #sqwk_teamdata_url = "http://www.squawka.com/wp-content/themes/squawka_web/leaderboard_process-v2.php?type=Team%20Stats&filter=2&league=126&team=0,31,32,302,33,169,34,170,315,36,37,38,39,41,43,44,45,46,47,48,49&played=All%20matches&seasonstart=&seasonend=&by=season&timestart=0&timeend=90&showtype=desc"
+    sqwk_teamdata_url = "http://www.squawka.com/wp-content/themes/squawka_web/leaderboard_process-v2.php?type=Team%20Stats&filter=2&league=165&team=0,31,32,299,33,169,34,315,36,37,38,39,40,43,44,45,46,47,323,48,49&played=All%20matches&seasonstart=&seasonend=&by=season&timestart=0&timeend=90&showtype=desc"
     data = JSON.load(open(sqwk_teamdata_url))
     data['result'].delete("sort")
     teamdata = data['result']
@@ -29,7 +30,8 @@ namespace :teams do
       "37" => "Man City",
       "38" => "Man Utd",
       "39" => "Newcastle",
-      "41" => "QPR",
+      "40" => "Norwich",
+#      "41" => "QPR",
       "43" => "Southampton",
       "44" => "Stoke",
       "45" => "Sunderland",
@@ -38,9 +40,11 @@ namespace :teams do
       "48" => "West Brom",
       "49" => "West Ham",
       "169" => "Crystal Palace",
-      "170" => "Hull",
-      "302" => "Burnley",
-      "315" => "Leicester"
+#       "170" => "Hull",
+      "299" => "Bournemouth",
+#      "302" => "Burnley",
+      "315" => "Leicester",
+      "323" => "Watford"
     }
 
     acrnym_mapping = { #mapping from sqwk_club_id to fpl_acrynm_name
@@ -52,7 +56,8 @@ namespace :teams do
       "37" => "MCI",
       "38" => "MUN",
       "39" => "NEW",
-      "41" => "QPR",
+      "40" => "NOR",
+#      "41" => "QPR",
       "43" => "SOU",
       "44" => "STK",
       "45" => "SUN",
@@ -61,9 +66,11 @@ namespace :teams do
       "48" => "WBA",
       "49" => "WHU",
       "169" => "CRY",
-      "170" => "HUL",
-      "302" => "BUR",
-      "315" => "LEI"
+#      "170" => "HUL",
+      "299" => "BOU",
+#      "302" => "BUR",
+      "315" => "LEI",
+      "323" => "WAT"
     }
 
     mapping.keys.each do |key|
@@ -84,7 +91,8 @@ namespace :teams do
     require 'open-uri'
     require 'json'
 
-    sqwk_teamdata_url = "http://www.squawka.com/wp-content/themes/squawka_web/leaderboard_process-v2.php?type=Team%20Stats&filter=2&league=126&team=0,31,32,302,33,169,34,170,315,36,37,38,39,41,43,44,45,46,47,48,49&played=All%20matches&seasonstart=&seasonend=&by=season&timestart=0&timeend=90&showtype=desc"
+#     sqwk_teamdata_url = "http://www.squawka.com/wp-content/themes/squawka_web/leaderboard_process-v2.php?type=Team%20Stats&filter=2&league=126&team=0,31,32,302,33,169,34,170,315,36,37,38,39,41,43,44,45,46,47,48,49&played=All%20matches&seasonstart=&seasonend=&by=season&timestart=0&timeend=90&showtype=desc"
+    sqwk_teamdata_url = "http://www.squawka.com/wp-content/themes/squawka_web/leaderboard_process-v2.php?type=Team%20Stats&filter=2&league=165&team=0,31,32,299,33,169,34,315,36,37,38,39,40,43,44,45,46,47,323,48,49&played=All%20matches&seasonstart=&seasonend=&by=season&timestart=0&timeend=90&showtype=desc"
     data = JSON.load(open(sqwk_teamdata_url))
     data['result'].delete("sort")
     teamdata = data['result']

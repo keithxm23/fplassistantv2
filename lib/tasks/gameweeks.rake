@@ -1,7 +1,7 @@
 namespace :gameweeks do
   desc "Populates Gameweek data"
   task :populate => :environment do
-    
+
     require 'open-uri'
     require 'json'
     require 'digest'
@@ -19,7 +19,7 @@ namespace :gameweeks do
       end
       plyr_count += 1
     end
-    
+
     if players.size < 620
       puts "player size <620"
       next
@@ -39,14 +39,17 @@ namespace :gameweeks do
       "LIV" => "Liverpool",
       "SWA" => "Swansea",
       "NEW" => "Newcastle",
-      "QPR" => "QPR",
+#       "QPR" => "QPR",
       "STK" => "Stoke",
       "SUN" => "Sunderland",
       "WHU" => "West Ham",
       "AVL" => "Aston Villa",
       "WBA" => "West Brom",
-      "BUR" => "Burnley",
-      "HUL" => "Hull"
+#       "BUR" => "Burnley",
+#       "HUL" => "Hull",
+      "WAT" => "Watford",
+      "BOU" => "Bournemouth",
+      "NOR" => "Norwich"
       }
 
     Gameweek.delete_all
@@ -93,7 +96,7 @@ namespace :gameweeks do
           Gameweek.create(gw)
         end
         gw_data[p['team_name']] = nil
-        
+
       end
     end
     Gameweek.dedupe

@@ -1,28 +1,24 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+To set up db from scratch:
 
-Things you may want to cover:
+Ensure mapping, acrnym_mapping, sqwk_teamdata_url is accurate in teams.rake
+Ensure FULL_TEAM_NAMES is accurate in players.rake and gameweeks.rake
 
-* Ruby version
+1. bundle exec rake db:migrate
+2. bundle exec rake players:populate
+3. bundle exec rake teams:seed_teams
+4. bundle exec rake player:populate_with_history
+4. bundle exec rake gameweeks:populate
 
-* System dependencies
+To get app running:
 
-* Configuration
+First follow above steps, then..
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+1. Ensure @short_names is accurate in gameweeks_controller.rb
+2. Ensure short_teamname, long_teamname, searchoptions and css styles are accurate in views/players/index.html.erb
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+#TODO:
+Stop using hardcoded team_data like above.
+

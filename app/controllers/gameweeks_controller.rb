@@ -26,7 +26,7 @@ class GameweeksController < ApplicationController
     end
 
     @curr_gw = Gameweek.where("home_goals is  null").minimum(:gw_num)
-    
+
     @short_name = {
       "Arsenal"=>"ARS",
       "Crystal Palace"=>"CRY",
@@ -40,14 +40,17 @@ class GameweeksController < ApplicationController
       "Liverpool"=>"LIV",
       "Swansea"=>"SWA",
       "Newcastle"=>"NEW",
-      "QPR"=>"QPR",
+#       "QPR"=>"QPR",
       "Stoke"=>"STK",
       "Sunderland"=>"SUN",
       "West Ham"=>"WHU",
       "Aston Villa"=>"AVL",
       "West Brom"=>"WBA",
-      "Burnley"=>"BUR",
-      "Hull"=>"HUL"
+#       "Burnley"=>"BUR",
+#       "Hull"=>"HUL",
+      "Bournemouth"=>"BOU",
+      "Watford"=>"WAT",
+      "Norwich"=>"NOR"
     }
 
     @vals = TeamPerformance.select("MAX(tot_avg) as max_tot," \

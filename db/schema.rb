@@ -68,8 +68,8 @@ ActiveRecord::Schema.define(version: 20141003030555) do
   create_table "players", force: true do |t|
     t.string   "first_name"
     t.string   "second_name"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "elementid"
     t.integer  "transfers_out"
     t.integer  "code"
